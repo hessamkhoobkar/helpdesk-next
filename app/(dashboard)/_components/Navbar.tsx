@@ -24,6 +24,7 @@ import { BellIcon } from "@/app/_assets/icons/Bell";
 import { PlusIcon } from "@/app/_assets/icons/Plus";
 
 // todo: add active link style
+// todo: get user data from api
 
 export default function AppNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
