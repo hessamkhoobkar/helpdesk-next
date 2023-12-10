@@ -10,29 +10,25 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Link,
+  Button,
   DropdownItem,
   DropdownTrigger,
+  DropdownSection,
   Dropdown,
   DropdownMenu,
   Avatar,
 } from "@nextui-org/react";
+import styles from "./navbar.module.css";
 import DarkmodeToggle from "./DarkmodeToggle";
+import { BellIcon } from "@/app/_assets/icons/Bell";
+import { PlusIcon } from "@/app/_assets/icons/Plus";
+
+// todo: add active link style
 
 export default function AppNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
+  const menuItems = ["Dashboard", "Tickets", "Users"];
 
   return (
     <Navbar
@@ -41,34 +37,41 @@ export default function AppNavbar() {
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarContent justify="center">
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
-        />
         <NavbarBrand>
-          <p className="font-bold text-white">HELPDESK</p>
+          <p className={styles.brandIcon}>HELPDESK</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-4 ms-8" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
+          <Link className="text-white" href="/">
+            Dashboard
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
+          <Link className="text-white" href="/tickets">
+            Tickets
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-white" href="/users">
+            Users
           </Link>
         </NavbarItem>
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
+        <NavbarItem>
+          <Button
+            isIconOnly
+            color="primary"
+            variant="flat"
+            className="text-white text-xl"
+          >
+            <BellIcon />
+          </Button>
+        </NavbarItem>
+
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -82,47 +85,59 @@ export default function AppNavbar() {
               src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
             />
           </DropdownTrigger>
+
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
-            </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="help_and_feedback" isReadOnly>
-              <DarkmodeToggle />
-            </DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
-            </DropdownItem>
+            <DropdownSection aria-label="profile">
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">Signed in as</p>
+                <p className="font-semibold">zoey@example.com</p>
+              </DropdownItem>
+            </DropdownSection>
+            <DropdownSection
+              className="sm:hidden"
+              aria-label="links"
+              showDivider
+            >
+              <DropdownItem key="mobile_link_dashboard" href="/">
+                Dashboard
+              </DropdownItem>
+              <DropdownItem key="mobile_link_tickets" href="/tickets">
+                Tickets
+              </DropdownItem>
+              <DropdownItem key="mobile_link_users" href="/users">
+                Users
+              </DropdownItem>
+            </DropdownSection>
+            <DropdownSection aria-label="Actions" showDivider>
+              <DropdownItem
+                href="/tickets/new"
+                key="add_ticket"
+                endContent={<PlusIcon className="text-xl" />}
+              >
+                Add ticket
+              </DropdownItem>
+              <DropdownItem key="quick_search" shortcut="⌘K">
+                Quick search
+              </DropdownItem>
+              <DropdownItem
+                key="darkmode_toggle"
+                isReadOnly
+                endContent={<DarkmodeToggle />}
+              >
+                Dark mode
+              </DropdownItem>
+            </DropdownSection>
+            <DropdownSection title="Dangerzone">
+              <DropdownItem key="help_and_feedback">
+                Help & Feedback
+              </DropdownItem>
+              <DropdownItem key="logout" color="danger">
+                Log Out
+              </DropdownItem>
+            </DropdownSection>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              className="w-full"
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
     </Navbar>
   );
 }
