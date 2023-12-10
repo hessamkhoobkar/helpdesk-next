@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Switch } from "@nextui-org/react";
-import { MoonIcon } from "@/app/_components/icons/MoonIcon";
-import { SunIcon } from "@/app/_components/icons/SunIcon";
+import { Switch, cn } from "@nextui-org/react";
+import { MoonIcon } from "@/app/_assets/icons/MoonIcon";
+import { SunIcon } from "@/app/_assets/icons/SunIcon";
 
 export default function App() {
   const [mounted, setMounted] = useState(false);
@@ -16,7 +16,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isDark) {
+    if (!isDark) {
       setTheme("dark");
     } else {
       setTheme("light");
@@ -30,11 +30,18 @@ export default function App() {
       isSelected={isDark}
       onValueChange={setIsDark}
       defaultSelected
+      classNames={{
+        wrapper: cn("mr-0"),
+      }}
       color="primary"
-      startContent={<SunIcon />}
-      endContent={<MoonIcon />}
-    >
-      Dark mode
-    </Switch>
+      size="sm"
+      thumbIcon={({ isSelected, className }) =>
+        isSelected ? (
+          <SunIcon className={className} />
+        ) : (
+          <MoonIcon className={className} />
+        )
+      }
+    ></Switch>
   );
 }
