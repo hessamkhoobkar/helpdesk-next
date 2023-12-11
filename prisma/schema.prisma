@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the User table
+// model User {
+//   id       Int       @id @default(autoincrement())
+//   username String
+//   email    String
+//   fullName String
+// }
+
+// Define the Ticket table
+model Ticket {
+  id          String         @id @default(uuid())
+  subject     String         @db.VarChar(255)
+  content     String         @db.Text
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  completedAt DateTime?
+  // userId      String
+  // assigneeId  String?
+  status      TicketStatus   @default(OPEN)
+  priority    TicketPriority @default(LOW)
+
+  // user     User           @relation(fields: [userId], references: [id])
+  // assignee User?          @relation("AssignedTickets", fields: [assigneeId], references: [id])
+}
+
+// Define the Comment table
+// model Comment {
+//   id        Int      @id @default(autoincrement())
+//   text      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   userId    Int
+//   ticketId  Int
+
+//   user   User   @relation(fields: [userId], references: [id])
+//   ticket Ticket @relation(fields: [ticketId], references: [id])
+// }
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CLOSED
+}
