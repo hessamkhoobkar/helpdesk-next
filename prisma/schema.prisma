@@ -22,17 +22,26 @@ datasource db {
 model Ticket {
   id          String         @id @default(uuid())
   subject     String         @db.VarChar(255)
-  content     String         @db.Text
+  description String         @db.Text
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  completedAt DateTime?
   // userId      String
   // assigneeId  String?
   status      TicketStatus   @default(OPEN)
   priority    TicketPriority @default(LOW)
+  categoryId  Int?
+
+  category Category? @relation(fields: [categoryId], references: [id])
 
   // user     User           @relation(fields: [userId], references: [id])
   // assignee User?          @relation("AssignedTickets", fields: [assigneeId], references: [id])
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+
+  tickets Ticket[]
 }
 
 // Define the Comment table
