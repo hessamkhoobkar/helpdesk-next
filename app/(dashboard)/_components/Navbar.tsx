@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Button,
   DropdownItem,
   DropdownTrigger,
@@ -20,6 +20,8 @@ import DarkmodeToggle from "./DarkmodeToggle";
 import { BellIcon } from "@/app/_assets/icons/Bell";
 import { PlusIcon } from "@/app/_assets/icons/Plus";
 
+// todo: style links
+// todo: add a fix width to the brand icon
 // todo: add active link style
 // todo: get user data from api
 
@@ -36,7 +38,9 @@ export default function AppNavbar() {
     >
       <NavbarContent justify="center">
         <NavbarBrand>
-          <p className={styles.brandIcon}>HELPDESK</p>
+          <Link href="/" className={styles.brandIcon}>
+            HELPDESK
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
