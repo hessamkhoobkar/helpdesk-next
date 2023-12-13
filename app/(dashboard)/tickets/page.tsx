@@ -1,6 +1,8 @@
 import axios from "axios";
+import Link from "next/link";
 import type { Ticket } from "@prisma/client";
 import TicketList from "./TicketList";
+import { Button } from "@nextui-org/react";
 
 // todo: handle error states and show user friendly error messages
 
@@ -27,7 +29,12 @@ export default async function TicketsPage() {
 
   return (
     <div className="flex flex-col justify-start items-start">
-      <h1>Tickets</h1>
+      <div className="flex justify-start items-center pb-2 mb-2 w-full">
+        <h1 className="text-xl font-bold">Tickets</h1>
+        <Button className="ms-auto" color="primary" href="/tickets/new">
+          <Link href="/tickets/new">Create new ticket</Link>
+        </Button>
+      </div>
       <div className="w-full flex flex-col justify-start items-start gap-2">
         {allTickets.length > 0 ? (
           <TicketList tickets={allTickets} />
