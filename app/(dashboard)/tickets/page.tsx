@@ -2,6 +2,8 @@ import axios from "axios";
 import type { Ticket } from "@prisma/client";
 import TicketList from "./TicketList";
 
+// todo: handle error states and show user friendly error messages
+
 export default async function TicketsPage() {
   let allTickets: Ticket[] = [];
 
@@ -24,9 +26,9 @@ export default async function TicketsPage() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col justify-start items-start">
       <h1>Tickets</h1>
-      <div className="flex flex-col justify-start items-start gap-2">
+      <div className="w-full flex flex-col justify-start items-start gap-2">
         {allTickets.length > 0 ? (
           <TicketList tickets={allTickets} />
         ) : (
