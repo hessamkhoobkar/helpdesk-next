@@ -11,32 +11,50 @@ datasource db {
 }
 
 // Define the User table
-// model User {
-//   id       Int       @id @default(autoincrement())
-//   username String
-//   email    String
-//   fullName String
-// }
+model User {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  first_name String   @db.VarChar(255)
+  last_name  String   @db.VarChar(255)
+  user_name  String   @db.VarChar(255)
+  email      String   @db.VarChar(255)
+  gender     String   @db.VarChar(255)
+  password   String   @db.VarChar(255)
+  role       String   @db.VarChar(255)
+  department String   @db.VarChar(255)
+  phone      String   @db.VarChar(255)
+  address    String   @db.Text
+  city       String   @db.VarChar(255)
+  state      String   @db.VarChar(255)
+  country    String   @db.VarChar(255)
+  zipCode    String   @db.VarChar(255)
+  type       UserType @default(EMPLOYEE)
+
+  ticketsAssignedToMe Ticket[]  @relation("AssignedTickets")
+  Ticket              Ticket[]
+  comments            Comment[]
+}
 
 // Define the Ticket table
 model Ticket {
-  id          String         @id @default(uuid())
+  id          String         @id @default(cuid())
   subject     String         @db.VarChar(255)
   description String         @db.Text
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  // userId      String
-  // assigneeId  String?
+  userId      String
+  assigneeId  String?
   status      TicketStatus   @default(OPEN)
   priority    TicketPriority @default(LOW)
   categoryId  Int?
 
   category Category? @relation(fields: [categoryId], references: [id])
-
-  // user     User           @relation(fields: [userId], references: [id])
-  // assignee User?          @relation("AssignedTickets", fields: [assigneeId], references: [id])
+  assignee User?     @relation("AssignedTickets", fields: [assigneeId], references: [id])
+  User     User      @relation(fields: [userId], references: [id])
+  comments Comment[]
 }
 
+// Define the Category table
 model Category {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
@@ -45,17 +63,24 @@ model Category {
 }
 
 // Define the Comment table
-// model Comment {
-//   id        Int      @id @default(autoincrement())
-//   text      String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   userId    Int
-//   ticketId  Int
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  ticketId  String
 
-//   user   User   @relation(fields: [userId], references: [id])
-//   ticket Ticket @relation(fields: [ticketId], references: [id])
-// }
+  user   User   @relation(fields: [userId], references: [id])
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+}
+
+// Define the enums
+enum UserType {
+  CLIENT
+  EMPLOYEE
+  ADMIN
+}
 
 enum TicketPriority {
   LOW
