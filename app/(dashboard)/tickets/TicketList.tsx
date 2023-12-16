@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import type { Ticket } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const columns = [
   {
@@ -34,6 +35,10 @@ const columns = [
     key: "priority",
     label: "priority",
   },
+  {
+    key: "categoryId",
+    label: "category",
+  },
 ];
 
 // todo: limit subject to 50 characters
@@ -48,10 +53,22 @@ export default function TicketList({ tickets }: { tickets: Ticket[] }) {
   const router = useRouter();
 
   const handleTicketClick = (ticketId: number | string | bigint) => {
-    console.log("ticketId", ticketId);
-
     router.push(`/tickets/${ticketId}`);
   };
+
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
+
+  const fetchCategories = async () => {
+    const response = await axios.get("http://localhost:3000/api/categories");
+    const categories = response.data;
+    setCategories([...categories]);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <Table
@@ -66,13 +83,37 @@ export default function TicketList({ tickets }: { tickets: Ticket[] }) {
 
       {tickets.length > 0 ? (
         <TableBody items={tickets}>
-          {(item) => (
-            <TableRow className="cursor-pointer" key={item.id}>
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
+          {tickets.map((ticket) => (
+            <TableRow key={ticket.id}>
+              {(columnKey) =>
+                columnKey === "categoryId" ? (
+                  <TableCell>
+                    {categories.find(
+                      (category) => category.id === ticket.categoryId
+                    )?.name || "No category"}
+                  </TableCell>
+                ) : (
+                  <TableCell>{getKeyValue(ticket, columnKey)}</TableCell>
+                )
+              }
             </TableRow>
-          )}
+          ))}
+
+          {/* {(item) => (
+            <TableRow className="cursor-pointer" key={item.id}>
+              {(columnKey) =>
+                columnKey === "categoryId" ? (
+                  <TableCell>
+                    {categories.find(
+                      (category) => category.id === item.categoryId
+                    )?.name || "No category"}
+                  </TableCell>
+                ) : (
+                  <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                )
+              }
+            </TableRow>
+          )} */}
         </TableBody>
       ) : (
         <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>

@@ -18,6 +18,8 @@ const priorities = [
 // todo: skeleton loading state for the form
 // todo: fetch data for assignee and category select fields
 
+// todo: Move ticket form to a separate component
+
 export default function NewTicketsPage() {
   return (
     <div>
