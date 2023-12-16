@@ -24,6 +24,7 @@ import { PlusIcon } from "@/app/_assets/icons/Plus";
 // todo: add a fix width to the brand icon
 // todo: add active link style
 // todo: get user data from api
+// todo: stop seting darkmode on each call
 
 export default function AppNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -84,7 +85,7 @@ export default function AppNavbar() {
               name="Jason Hughes"
               size="sm"
               radius="md"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src="user-avatar/userav136.webp"
             />
           </DropdownTrigger>
 
