@@ -1,10 +1,15 @@
-import { Button } from "@nextui-org/button";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  console.log(session);
+
   return (
     <>
       <h1>Hello world</h1>
-      <Button>Click me</Button>
+      <h2>Server Session</h2>
+      <pre>{JSON.stringify(session)}</pre>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus cumque
         in unde vel, distinctio dolorum modi, consequatur molestiae atque culpa

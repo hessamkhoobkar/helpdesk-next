@@ -1,5 +1,3 @@
-// user-avatar/userav136.webp
-
 export const users = [
   {
     createdAt: "2021-08-04T17:38:45Z",
@@ -7,7 +5,7 @@ export const users = [
     last_name: "Theobald",
     user_name: "ntheobald0",
     email: "ntheobald0@behance.net",
-    password: "lY4a{&Ew",
+    password: "lY4a66&Ew",
     avatar: "user-avatar/userav136.webp",
     gender: "Female",
     role: "IT Support Specialist",
