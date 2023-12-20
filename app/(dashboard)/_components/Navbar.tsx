@@ -24,19 +24,14 @@ import { PlusIcon } from "@/app/_assets/icons/Plus";
 // todo: add a fix width to the brand icon
 // todo: add active link style
 // todo: get user data from api
-// todo: stop seting darkmode on each call
 
 export default function AppNavbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const menuItems = ["Dashboard", "Tickets", "Users"];
 
+  console.log("NavBar Mounted");
+
   return (
-    <Navbar
-      className="bg-primary-700 dark:bg-primary-200"
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
-    >
+    <Navbar className="bg-primary-700 dark:bg-primary-200">
       <NavbarContent justify="center">
         <NavbarBrand>
           <Link href="/" className={styles.brandIcon}>
@@ -91,7 +86,11 @@ export default function AppNavbar() {
 
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownSection aria-label="profile">
-              <DropdownItem key="profile" className="h-14 gap-2">
+              <DropdownItem
+                textValue="zoey@example.com"
+                key="profile"
+                className="h-14 gap-2"
+              >
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">zoey@example.com</p>
               </DropdownItem>

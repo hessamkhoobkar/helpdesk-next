@@ -7,21 +7,26 @@ import { MoonIcon } from "@/app/_assets/icons/MoonIcon";
 import { SunIcon } from "@/app/_assets/icons/SunIcon";
 
 export default function App() {
+  console.log("Runed");
+
   const [mounted, setMounted] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [isDark, setIsDark] = useState(
+    theme === "light" ? false : true || false
+  );
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (!isDark) {
+    console.log(isDark);
+    if (isDark) {
       setTheme("dark");
     } else {
       setTheme("light");
     }
-  }, [isDark]);
+  }, [isDark, setTheme]);
 
   if (!mounted) return null;
 
@@ -29,7 +34,6 @@ export default function App() {
     <Switch
       isSelected={isDark}
       onValueChange={setIsDark}
-      defaultSelected
       classNames={{
         wrapper: cn("mr-0"),
       }}
@@ -37,9 +41,9 @@ export default function App() {
       size="sm"
       thumbIcon={({ isSelected, className }) =>
         isSelected ? (
-          <SunIcon className={className} />
-        ) : (
           <MoonIcon className={className} />
+        ) : (
+          <SunIcon className={className} />
         )
       }
     ></Switch>
