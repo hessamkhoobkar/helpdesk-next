@@ -17,8 +17,6 @@ import {
 } from "@nextui-org/react";
 import { DangerTriangle } from "@/app/_assets/icons/DangerTriangle";
 
-// todo: handle error states and show user friendly error messages
-
 export default function SignInCard({
   fullname,
   email,
