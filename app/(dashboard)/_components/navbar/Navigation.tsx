@@ -26,8 +26,10 @@ export default function Navigation() {
       {menuItems.map((item) => (
         <NavbarItem key={item.label}>
           <Link
-            className={`font-medium py-4 px-2 rounded-xl hover:text-white transition-all duration-200 ease-in-out ${
-              pathname === item.href ? "text-white" : "text-primary-200"
+            className={`font-medium py-4 px-2 rounded-xl hover:text-white dark:hover:text-white transition-all duration-200 ease-in-out ${
+              pathname === item.href
+                ? "text-white"
+                : "text-primary-200 dark:text-primary-700"
             }`}
             href={item.href}
           >
