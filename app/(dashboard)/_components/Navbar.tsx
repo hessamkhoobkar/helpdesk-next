@@ -13,9 +13,6 @@ import UserMenu from "./navbar/UserMenu";
 import { BellIcon } from "@/app/_assets/icons/Bell";
 import Navigation from "./navbar/Navigation";
 
-// todo: style links
-// todo: add active link style
-
 export default async function AppNavbar() {
   const session = await getServerSession(authOptions);
 
