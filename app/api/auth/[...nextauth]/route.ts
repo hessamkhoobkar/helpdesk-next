@@ -39,8 +39,9 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          username: user.user_name,
-          randomKey: "this is a random key",
+          image: user.avatar,
+          name: user.user_name,
+          randomKey: "flyoverthemoon",
         };
       },
     }),

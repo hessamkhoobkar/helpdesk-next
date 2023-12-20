@@ -7,8 +7,6 @@ import { MoonIcon } from "@/app/_assets/icons/MoonIcon";
 import { SunIcon } from "@/app/_assets/icons/SunIcon";
 
 export default function App() {
-  console.log("Runed");
-
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(
@@ -20,7 +18,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    console.log(isDark);
     if (isDark) {
       setTheme("dark");
     } else {
