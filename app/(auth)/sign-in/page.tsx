@@ -6,14 +6,14 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen p-6 xl:p-4 grid grid-cols-1 xl:grid-cols-5 grid-rows-1 gap-4">
       <div className="col-span-1 xl:col-span-2 row-span-1 flex flex-col justify-between items-center">
-        <div className="w-full">
+        <div className="w-full max-w-sm">
           <span
             className={`text-2xl font-black text-primary ${styles.brandIcon}`}
           >
             HELPDESK
           </span>
         </div>
-        <div className="flex flex-col gap-6">
+        <div className="w-full max-w-sm flex flex-col gap-6">
           <div className="flex flex-col gap-2 mb-4">
             <h1 className="text-4xl font-black">Sign in</h1>
             <p>Please select one of provided demo accounts.</p>
@@ -43,7 +43,7 @@ export default function SignInPage() {
             />
           </div>
         </div>
-        <div className="w-full text-center">
+        <div className="w-full max-w-sm">
           <p className="text-sm">
             Need an account?{" "}
             <span className="text-primary underline font-bold cursor-not-allowed">
@@ -57,6 +57,7 @@ export default function SignInPage() {
           <Image
             fill
             src="/bg/sigin.webp"
+            className="opacity-50"
             alt="an abstract black and blue cloth design"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black "></div>
