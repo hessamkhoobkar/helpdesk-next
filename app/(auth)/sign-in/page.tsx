@@ -52,7 +52,7 @@ export default function SignInPage() {
           </p>
         </div>
       </div>
-      <div className="col-span-1 xl:col-span-3 row-span-1 rounded-2xl bg-primary-800 text-white relative overflow-hidden">
+      <div className="col-span-1 xl:col-span-3 row-span-1 rounded-2xl bg-primary-800 dark:bg-primary-200 text-white relative overflow-hidden">
         <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden z-0">
           <Image
             fill
