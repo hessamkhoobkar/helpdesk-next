@@ -47,9 +47,9 @@ model Ticket {
   assigneeId  String?
   status      TicketStatus   @default(OPEN)
   priority    TicketPriority @default(LOW)
-  categoryId  Int?
+  categoryId  Int
 
-  category Category? @relation(fields: [categoryId], references: [id])
+  category Category  @relation(fields: [categoryId], references: [id])
   assignee User?     @relation("AssignedTickets", fields: [assigneeId], references: [id])
   User     User      @relation(fields: [userId], references: [id])
   comments Comment[]
