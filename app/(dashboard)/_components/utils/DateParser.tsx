@@ -1,9 +1,9 @@
 export default function DateParser({
   date,
-  weekday,
-  day,
-  month,
-  year,
+  weekday = "long",
+  day = "numeric",
+  month = "short",
+  year = "numeric",
 }: {
   date: Date | string;
   month?: "short" | "long" | "narrow" | "numeric" | "2-digit" | undefined;

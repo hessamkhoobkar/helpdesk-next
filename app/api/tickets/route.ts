@@ -26,8 +26,34 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newTicket, { status: 201 });
 }
 
-export async function GET() {
-  const allTickets = await prisma.ticket.findMany();
+export async function GET(request: NextRequest) {
+  const params = new URLSearchParams(request.nextUrl.searchParams);
+
+  const allTickets = await prisma.ticket.findMany({
+    where: {
+      assigneeId: params.get("userId"),
+    },
+    orderBy: {
+      status: "asc",
+    },
+    include: {
+      category: true,
+      assignee: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+        },
+      },
+      User: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+        },
+      },
+    },
+  });
 
   return NextResponse.json(allTickets, { status: 200 });
 }
