@@ -10,37 +10,38 @@ import {
   TableCell,
   getKeyValue,
 } from "@nextui-org/react";
+import DashboardCard from "./DashboardCard";
 
 const rows = [
   {
     key: "1",
     name: "Tony Reichert",
     role: "CEO",
-    status: "Active",
+    number: "8",
   },
   {
     key: "2",
     name: "Zoey Lang",
     role: "Technical Lead",
-    status: "Paused",
+    number: "7",
   },
   {
     key: "3",
     name: "Jane Fisher",
     role: "Senior Developer",
-    status: "Active",
+    number: "4",
   },
   {
     key: "4",
     name: "William Howard",
     role: "Community Manager",
-    status: "Vacation",
+    number: "4",
   },
   {
     key: "5",
     name: "William Howard",
     role: "Community Manager",
-    status: "Vacation",
+    number: "2",
   },
 ];
 
@@ -54,38 +55,34 @@ const columns = [
     label: "ROLE",
   },
   {
-    key: "status",
-    label: "STATUS",
+    key: "number",
+    label: "number",
   },
 ];
 
 export default function MostCard() {
   return (
-    <Card className="shadow">
-      <CardHeader>Most active days</CardHeader>
-      <Divider />
-      <CardBody className="p-1">
-        <Table
-          hideHeader
-          removeWrapper
-          aria-label="Example table with dynamic content"
-        >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={rows}>
-            {(item) => (
-              <TableRow key={item.key}>
-                {(columnKey) => (
-                  <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </CardBody>
-    </Card>
+    <DashboardCard title="Your tickets created by">
+      <Table
+        hideHeader
+        removeWrapper
+        aria-label="Example table with dynamic content"
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={rows}>
+          {(item) => (
+            <TableRow key={item.key}>
+              {(columnKey) => (
+                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </DashboardCard>
   );
 }

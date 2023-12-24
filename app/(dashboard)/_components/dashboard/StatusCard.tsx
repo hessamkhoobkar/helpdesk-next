@@ -25,7 +25,7 @@ export default function StatusCard({ tickets }: { tickets: Ticket[] }) {
 
   return (
     <Card className="shadow">
-      <CardHeader>My Tickets by status</CardHeader>
+      <CardHeader className="font-bold">My tickets by status</CardHeader>
       <Divider />
       <CardBody className="p-8">
         <div className="flex justify-around gap-4">
@@ -33,13 +33,13 @@ export default function StatusCard({ tickets }: { tickets: Ticket[] }) {
             <span className="text-5xl font-black text-danger">
               {totalOpenTickets}
             </span>
-            <span className="text-xs font-medium text-default-400">
+            <span className="text-xs font-bold text-default dark:text-default-600">
               Open Tickets
             </span>
           </div>
-          <div className="flex flex-col justify-center text-default items-center gap-2">
+          <div className="flex flex-col justify-center text-warning items-center gap-2">
             <span className="text-5xl font-black">{totalProgressTickets}</span>
-            <span className="text-xs font-medium text-default-400">
+            <span className="text-xs font-bold text-default dark:text-default-600">
               In-Progress Tickets
             </span>
           </div>
@@ -47,7 +47,7 @@ export default function StatusCard({ tickets }: { tickets: Ticket[] }) {
             <span className="text-5xl font-black text-primary">
               {totalCompletedTickets + totalClosedTickets}
             </span>
-            <span className="text-xs font-medium text-default-400">
+            <span className="text-xs font-bold text-default dark:text-default-600">
               Completed Tickets
             </span>
           </div>
@@ -59,7 +59,7 @@ export default function StatusCard({ tickets }: { tickets: Ticket[] }) {
           style={{ width: `${openPercentage}%` }}
         ></div>
         <div
-          className="bg-default h-full"
+          className="bg-warning h-full"
           style={{ width: `${progressPercentage}%` }}
         ></div>
         <div

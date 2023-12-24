@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import DashboardCard from "./DashboardCard";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -12,14 +12,14 @@ export const data = {
     {
       data: [10, 9, 6],
       backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
+        "rgba(29, 85, 196, 0.2)",
+        "rgba(226, 124, 0, 0.2)",
+        "rgba(226, 43, 34, 0.2)",
       ],
       borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
+        "rgba(29, 85, 196, 1)",
+        "rgba(226, 124, 0, 1)",
+        "rgba(226, 43, 34, 1)",
       ],
       hoverOffset: 20,
       borderWidth: 1,
@@ -29,23 +29,19 @@ export const data = {
 
 export default function PriorityCard() {
   return (
-    <Card className="shadow">
-      <CardHeader>My Tickets by status</CardHeader>
-      <Divider />
-      <CardBody className="p-1">
-        <Doughnut
-          data={data}
-          options={{
-            aspectRatio: 2,
-            radius: "90%",
-            plugins: {
-              legend: {
-                position: "right",
-              },
+    <DashboardCard title="My tickets by Priority">
+      <Doughnut
+        data={data}
+        options={{
+          aspectRatio: 2,
+          radius: "90%",
+          plugins: {
+            legend: {
+              position: "right",
             },
-          }}
-        />
-      </CardBody>
-    </Card>
+          },
+        }}
+      />
+    </DashboardCard>
   );
 }

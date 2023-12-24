@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import DashboardCard from "./DashboardCard";
 
 ChartJS.register(
   CategoryScale,
@@ -21,44 +22,52 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-};
-
-const labels = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export const data = {
   labels,
   datasets: [
     {
-      label: "Tickets per day",
-      data: [65, 59, 80, 81, 56, 55, 40],
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      label: "Tickets",
+      data: [4, 0, 8, 1, 11, 0, 1],
+      backgroundColor: ["rgba(29, 85, 196, 0.2)"],
+      borderColor: ["rgba(29, 85, 196, 1)"],
+      borderWidth: 1,
     },
   ],
 };
 
 export default function DayCard() {
+  const { theme } = useTheme();
+  const scalesColor = theme === "dark" ? "#131e30" : "#e6ebed";
+  const ticksColor = theme === "dark" ? "#354252" : "#a0b0ba";
+
+  const options = {
+    responsive: true,
+    scales: {
+      x: {
+        ticks: { color: ticksColor },
+        grid: {
+          color: scalesColor,
+        },
+      },
+      y: {
+        ticks: { color: ticksColor },
+        grid: {
+          color: scalesColor,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
   return (
-    <Card className="shadow">
-      <CardHeader>Most active days</CardHeader>
-      <Divider />
-      <CardBody className="p-1">
-        <Bar options={options} data={data} />
-      </CardBody>
-    </Card>
+    <DashboardCard title="Most busy days">
+      <Bar options={options} data={data} />
+    </DashboardCard>
   );
 }

@@ -10,78 +10,75 @@ import {
   TableCell,
   getKeyValue,
 } from "@nextui-org/react";
+import DashboardCard from "./DashboardCard";
 
 const rows = [
   {
     key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
+    subject: "Software Installation Error",
+    createdAt: "Tuesday, Sep 21, 2021",
+    priority: "Medium",
   },
   {
     key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
+    subject: "Missing Files in Shared Drive",
+    createdAt: "Monday, Aug 26, 2019",
+    priority: "High",
   },
   {
     key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
+    subject: "Outlook Calendar Sync Issue",
+    createdAt: "Saturday, Mar 23, 2019",
+    priority: "High",
   },
   {
     key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
+    subject: "Browser Compatibility Issue",
+    createdAt: "Sunday, Jun 27, 2021",
+    priority: "Low",
   },
   {
     key: "5",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
+    subject: "Unable to Access Email Account",
+    createdAt: "Friday, Jul 19, 2019",
+    priority: "Low",
   },
 ];
 
 const columns = [
   {
-    key: "name",
-    label: "NAME",
+    key: "subject",
+    label: "Subject",
   },
   {
-    key: "role",
-    label: "ROLE",
+    key: "createdAt",
+    label: "Created at",
   },
   {
-    key: "status",
-    label: "STATUS",
+    key: "priority",
+    label: "Priority",
   },
 ];
 
 export default function LatestCard() {
   return (
-    <Card className="shadow">
-      <CardHeader>Most active days</CardHeader>
-      <Divider />
-      <CardBody className="p-1">
-        <Table removeWrapper aria-label="Example table with dynamic content">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={rows}>
-            {(item) => (
-              <TableRow key={item.key}>
-                {(columnKey) => (
-                  <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </CardBody>
-    </Card>
+    <DashboardCard title="Last five tickets">
+      <Table removeWrapper aria-label="Example table with dynamic content">
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={rows}>
+          {(item) => (
+            <TableRow key={item.key}>
+              {(columnKey) => (
+                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </DashboardCard>
   );
 }
