@@ -1,51 +1,72 @@
 "use client";
 
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import type { Ticket } from "@prisma/client";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+export default function StatusCard({ tickets }: { tickets: Ticket[] }) {
+  const totalTickets = tickets.length;
+  const totalOpenTickets = tickets.filter(
+    (ticket) => ticket.status === "OPEN"
+  ).length;
+  const totalProgressTickets = tickets.filter(
+    (ticket) => ticket.status === "IN_PROGRESS"
+  ).length;
+  const totalCompletedTickets = tickets.filter(
+    (ticket) => ticket.status === "COMPLETED"
+  ).length;
+  const totalClosedTickets = tickets.filter(
+    (ticket) => ticket.status === "CLOSED"
+  ).length;
 
-export const data = {
-  labels: ["Low", "Meduim", "High"],
-  datasets: [
-    {
-      data: [10, 9, 6],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-      ],
-      hoverOffset: 20,
-      borderWidth: 1,
-    },
-  ],
-};
+  const openPercentage = (totalOpenTickets / totalTickets) * 100;
+  const progressPercentage = (totalProgressTickets / totalTickets) * 100;
+  const closedPercentage =
+    ((totalCompletedTickets + totalClosedTickets) / totalTickets) * 100;
 
-export default function StatusCard() {
   return (
     <Card className="shadow">
       <CardHeader>My Tickets by status</CardHeader>
       <Divider className="opacity-50" />
-      <CardBody className="p-1">
-        <Doughnut
-          data={data}
-          options={{
-            aspectRatio: 2,
-            radius: "90%",
-            plugins: {
-              legend: {
-                position: "right",
-              },
-            },
-          }}
-        />
+      <CardBody className="p-8">
+        <div className="flex justify-around gap-4">
+          <div className="flex flex-col justify-center items-center gap-2">
+            <span className="text-5xl font-black text-danger">
+              {totalOpenTickets}
+            </span>
+            <span className="text-xs font-medium text-default-400">
+              Open Tickets
+            </span>
+          </div>
+          <div className="flex flex-col justify-center text-default items-center gap-2">
+            <span className="text-5xl font-black">{totalProgressTickets}</span>
+            <span className="text-xs font-medium text-default-400">
+              In-Progress Tickets
+            </span>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-2">
+            <span className="text-5xl font-black text-primary">
+              {totalCompletedTickets + totalClosedTickets}
+            </span>
+            <span className="text-xs font-medium text-default-400">
+              Completed Tickets
+            </span>
+          </div>
+        </div>
       </CardBody>
+      <div className="flex h-12 gap-1">
+        <div
+          className="bg-danger h-full"
+          style={{ width: `${openPercentage}%` }}
+        ></div>
+        <div
+          className="bg-default h-full"
+          style={{ width: `${progressPercentage}%` }}
+        ></div>
+        <div
+          className="bg-primary h-full"
+          style={{ width: `${closedPercentage}%` }}
+        ></div>
+      </div>
     </Card>
   );
 }
