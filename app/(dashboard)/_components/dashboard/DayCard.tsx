@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import DashboardCard from "./DashboardCard";
+import { Ticket } from "@prisma/client";
 
 ChartJS.register(
   CategoryScale,
@@ -22,22 +23,30 @@ ChartJS.register(
   Legend
 );
 
-const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Tickets",
-      data: [4, 0, 8, 1, 11, 0, 1],
-      backgroundColor: ["rgba(29, 85, 196, 0.2)"],
-      borderColor: ["rgba(29, 85, 196, 1)"],
-      borderWidth: 1,
-    },
-  ],
-};
+export default function DayCard({ tickets }: { tickets: Ticket[] }) {
+  const dayData = [0, 0, 0, 0, 0, 0, 0];
 
-export default function DayCard() {
+  tickets.forEach((ticket) => {
+    const date = new Date(ticket.createdAt);
+    const day = date.getDay();
+    dayData[day] += 1;
+  });
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Tickets",
+        data: dayData,
+        backgroundColor: ["rgba(29, 85, 196, 0.2)"],
+        borderColor: ["rgba(29, 85, 196, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const { theme } = useTheme();
   const scalesColor = theme === "dark" ? "#131e30" : "#e6ebed";
   const ticksColor = theme === "dark" ? "#354252" : "#a0b0ba";

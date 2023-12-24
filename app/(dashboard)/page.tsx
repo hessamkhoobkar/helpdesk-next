@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Ticket } from "@prisma/client";
+import type { Ticket, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import StatusCard from "./_components/dashboard/StatusCard";
@@ -9,8 +9,10 @@ import LatestCard from "./_components/dashboard/LatestCard";
 import MostCard from "./_components/dashboard/MostCard";
 import PriorityCard from "./_components/dashboard/PriorityCard";
 
+type ExtendedTicket = Ticket & { User: User };
+
 export default async function Home() {
-  let tickets: Ticket[] = [];
+  let tickets: ExtendedTicket[] = [];
 
   const session = await getServerSession(authOptions);
   // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
@@ -21,6 +23,11 @@ export default async function Home() {
   );
   tickets = response.data;
 
+  const categoryResponse = await axios.get(
+    "http://localhost:3000/api/categories"
+  );
+  const categories = categoryResponse.data;
+
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
@@ -28,19 +35,19 @@ export default async function Home() {
           <PriorityCard tickets={tickets} />
         </div>
         <div className="col-span-1 lg:col-span-4">
-          <CategoryCard />
+          <CategoryCard tickets={tickets} categories={categories} />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-4">
-          <DayCard />
+          <DayCard tickets={tickets} />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-6">
           <StatusCard tickets={tickets} />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-6">
-          <MostCard />
+          <MostCard tickets={tickets} />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-12">
-          <LatestCard />
+          <LatestCard tickets={tickets} />
         </div>
       </div>
     </div>

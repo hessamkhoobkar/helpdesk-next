@@ -11,39 +11,9 @@ import {
   getKeyValue,
 } from "@nextui-org/react";
 import DashboardCard from "./DashboardCard";
-
-const rows = [
-  {
-    key: "1",
-    subject: "Software Installation Error",
-    createdAt: "Tuesday, Sep 21, 2021",
-    priority: "Medium",
-  },
-  {
-    key: "2",
-    subject: "Missing Files in Shared Drive",
-    createdAt: "Monday, Aug 26, 2019",
-    priority: "High",
-  },
-  {
-    key: "3",
-    subject: "Outlook Calendar Sync Issue",
-    createdAt: "Saturday, Mar 23, 2019",
-    priority: "High",
-  },
-  {
-    key: "4",
-    subject: "Browser Compatibility Issue",
-    createdAt: "Sunday, Jun 27, 2021",
-    priority: "Low",
-  },
-  {
-    key: "5",
-    subject: "Unable to Access Email Account",
-    createdAt: "Friday, Jul 19, 2019",
-    priority: "Low",
-  },
-];
+import { Ticket } from "@prisma/client";
+import DateParser from "../utils/DateParser";
+import Link from "next/link";
 
 const columns = [
   {
@@ -60,7 +30,16 @@ const columns = [
   },
 ];
 
-export default function LatestCard() {
+export default function LatestCard({ tickets }: { tickets: Ticket[] }) {
+  const rows = tickets.slice(0, 5).map((ticket) => {
+    return {
+      key: ticket.id,
+      subject: ticket.subject,
+      createdAt: ticket.createdAt,
+      priority: ticket.priority,
+    };
+  });
+
   return (
     <DashboardCard title="Last five tickets">
       <Table removeWrapper aria-label="Example table with dynamic content">
@@ -72,9 +51,24 @@ export default function LatestCard() {
         <TableBody items={rows}>
           {(item) => (
             <TableRow key={item.key}>
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
+              {(columnKey) =>
+                columnKey === "subject" ? (
+                  <TableCell>
+                    <Link
+                      className="w-full h-full block text-primary hover:underline hover:text-primary-600 dark:text-primary-600 dark:hover:text-primary-700 transition-all duration-200 ease-in-out"
+                      href={`/tickets/${item.key}`}
+                    >
+                      {getKeyValue(item, columnKey)}
+                    </Link>
+                  </TableCell>
+                ) : columnKey === "createdAt" ? (
+                  <TableCell>
+                    <DateParser date={item.createdAt} />
+                  </TableCell>
+                ) : (
+                  <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                )
+              }
             </TableRow>
           )}
         </TableBody>

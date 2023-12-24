@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import {
   Table,
   TableHeader,
@@ -11,39 +10,16 @@ import {
   getKeyValue,
 } from "@nextui-org/react";
 import DashboardCard from "./DashboardCard";
+import { Ticket, User } from "@prisma/client";
 
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    number: "8",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    number: "7",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    number: "4",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    number: "4",
-  },
-  {
-    key: "5",
-    name: "William Howard",
-    role: "Community Manager",
-    number: "2",
-  },
-];
+interface TableUser {
+  id: string;
+  name: string;
+  role: string;
+  ticketCount: number;
+}
+
+type ExtendedTicket = Ticket & { User: User };
 
 const columns = [
   {
@@ -55,14 +31,48 @@ const columns = [
     label: "ROLE",
   },
   {
-    key: "number",
-    label: "number",
+    key: "ticketCount",
+    label: "ticketCount",
   },
 ];
 
-export default function MostCard() {
+export default function MostCard({ tickets }: { tickets: ExtendedTicket[] }) {
+  let users: TableUser[] = [];
+
+  tickets.forEach((ticket) => {
+    const isFound = users.some((user) => {
+      if (user.id === ticket.userId) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (isFound) {
+      return;
+    }
+
+    users.push({
+      id: ticket.userId,
+
+      name: ticket.User.first_name + " " + ticket.User.last_name,
+      role: ticket.User.role,
+      ticketCount: 0,
+    });
+  });
+
+  tickets.forEach((ticket) => {
+    users.forEach((user) => {
+      if (user.id === ticket.userId) {
+        user.ticketCount++;
+      }
+    });
+  });
+
+  const rows = users.sort((a, b) => b.ticketCount - a.ticketCount).slice(0, 5);
+
   return (
-    <DashboardCard title="Your tickets created by">
+    <DashboardCard title="Your tickets created mostly by">
       <Table
         hideHeader
         removeWrapper
@@ -75,7 +85,7 @@ export default function MostCard() {
         </TableHeader>
         <TableBody items={rows}>
           {(item) => (
-            <TableRow key={item.key}>
+            <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>{getKeyValue(item, columnKey)}</TableCell>
               )}
