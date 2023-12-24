@@ -3,11 +3,11 @@ import type { Ticket } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
-import StatusCard from "./dashboard/StatusCard";
-import CategoryCard from "./dashboard/CategoryCard";
-import DayCard from "./dashboard/DayCard";
-import LatestCard from "./dashboard/LatestCard";
-import MostCard from "./dashboard/MostCard";
+import StatusCard from "./_components/dashboard/StatusCard";
+import CategoryCard from "./_components/dashboard/CategoryCard";
+import DayCard from "./_components/dashboard/DayCard";
+import LatestCard from "./_components/dashboard/LatestCard";
+import MostCard from "./_components/dashboard/MostCard";
 
 export default async function Home() {
   let allTickets: Ticket[] = [];
