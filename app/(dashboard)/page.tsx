@@ -1,32 +1,51 @@
 import axios from "axios";
-import type { Ticket, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+import type { Category, Ticket, User } from "@prisma/client";
+
+import DayCard from "./_components/dashboard/DayCard";
+import MostCard from "./_components/dashboard/MostCard";
+import LatestCard from "./_components/dashboard/LatestCard";
 import StatusCard from "./_components/dashboard/StatusCard";
 import CategoryCard from "./_components/dashboard/CategoryCard";
-import DayCard from "./_components/dashboard/DayCard";
-import LatestCard from "./_components/dashboard/LatestCard";
-import MostCard from "./_components/dashboard/MostCard";
 import PriorityCard from "./_components/dashboard/PriorityCard";
 
 type ExtendedTicket = Ticket & { User: User };
 
 export default async function Home() {
   let tickets: ExtendedTicket[] = [];
+  let categories: Category[] = [];
+  let cuurentUserId: string;
 
-  const session = await getServerSession(authOptions);
-  // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
-  const cuurentUserId = session!.user!.id;
+  try {
+    const session = await getServerSession(authOptions);
+    // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
+    cuurentUserId = session!.user!.id;
 
-  const response = await axios.get(
-    `http://localhost:3000/api/tickets?userId=${cuurentUserId}`
-  );
-  tickets = response.data;
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/tickets?userId=${cuurentUserId}`
+      );
+      tickets = response.data;
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+      throw new Error(`Error fetching tickets: ${error}`);
+    }
 
-  const categoryResponse = await axios.get(
-    "http://localhost:3000/api/categories"
-  );
-  const categories = categoryResponse.data;
+    try {
+      const categoryResponse = await axios.get(
+        "http://localhost:3000/api/categories"
+      );
+      categories = categoryResponse.data;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      throw new Error(`Error fetching categories: ${error}`);
+    }
+  } catch (error) {
+    console.error("Error getting session:", error);
+    throw new Error(`Error getting session: ${error}`);
+  }
 
   return (
     <div className="w-full">
