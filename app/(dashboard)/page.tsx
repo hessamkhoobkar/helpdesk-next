@@ -10,7 +10,7 @@ import MostCard from "./_components/dashboard/MostCard";
 import PriorityCard from "./_components/dashboard/PriorityCard";
 
 export default async function Home() {
-  let allTickets: Ticket[] = [];
+  let tickets: Ticket[] = [];
 
   const session = await getServerSession(authOptions);
   // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
@@ -19,13 +19,13 @@ export default async function Home() {
   const response = await axios.get(
     `http://localhost:3000/api/tickets?userId=${cuurentUserId}`
   );
-  allTickets = response.data;
+  tickets = response.data;
 
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         <div className="col-span-1 lg:col-span-4">
-          <PriorityCard />
+          <PriorityCard tickets={tickets} />
         </div>
         <div className="col-span-1 lg:col-span-4">
           <CategoryCard />
@@ -34,7 +34,7 @@ export default async function Home() {
           <DayCard />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-6">
-          <StatusCard tickets={allTickets} />
+          <StatusCard tickets={tickets} />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-6">
           <MostCard />
