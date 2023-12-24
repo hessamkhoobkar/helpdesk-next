@@ -17,7 +17,7 @@ export default async function AppNavbar() {
   const session = await getServerSession(authOptions);
 
   return (
-    <Navbar className="bg-primary-700 dark:bg-primary-200">
+    <Navbar maxWidth="xl" className="bg-primary-700 dark:bg-primary-200">
       <NavbarContent justify="center">
         <NavbarBrand className="w-24">
           <Link href="/" className={styles.brandIcon}>
