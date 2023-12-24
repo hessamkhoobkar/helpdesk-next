@@ -31,7 +31,7 @@ export default function PriorityCard() {
   return (
     <Card className="shadow">
       <CardHeader>My Tickets by status</CardHeader>
-      <Divider className="opacity-50" />
+      <Divider />
       <CardBody className="p-1">
         <Doughnut
           data={data}

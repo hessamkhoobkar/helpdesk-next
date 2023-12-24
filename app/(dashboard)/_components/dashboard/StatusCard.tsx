@@ -26,7 +26,7 @@ export default function StatusCard({ tickets }: { tickets: Ticket[] }) {
   return (
     <Card className="shadow">
       <CardHeader>My Tickets by status</CardHeader>
-      <Divider className="opacity-50" />
+      <Divider />
       <CardBody className="p-8">
         <div className="flex justify-around gap-4">
           <div className="flex flex-col justify-center items-center gap-2">

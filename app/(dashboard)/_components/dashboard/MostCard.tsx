@@ -63,7 +63,7 @@ export default function MostCard() {
   return (
     <Card className="shadow">
       <CardHeader>Most active days</CardHeader>
-      <Divider className="opacity-50" />
+      <Divider />
       <CardBody className="p-1">
         <Table
           hideHeader

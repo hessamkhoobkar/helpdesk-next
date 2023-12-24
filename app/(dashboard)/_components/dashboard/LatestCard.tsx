@@ -63,7 +63,7 @@ export default function LatestCard() {
   return (
     <Card className="shadow">
       <CardHeader>Most active days</CardHeader>
-      <Divider className="opacity-50" />
+      <Divider />
       <CardBody className="p-1">
         <Table removeWrapper aria-label="Example table with dynamic content">
           <TableHeader columns={columns}>

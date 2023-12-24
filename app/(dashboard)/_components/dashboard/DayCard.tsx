@@ -55,7 +55,7 @@ export default function DayCard() {
   return (
     <Card className="shadow">
       <CardHeader>Most active days</CardHeader>
-      <Divider className="opacity-50" />
+      <Divider />
       <CardBody className="p-1">
         <Bar options={options} data={data} />
       </CardBody>

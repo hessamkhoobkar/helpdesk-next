@@ -28,7 +28,7 @@ export default function CategoryCard() {
   return (
     <Card className="shadow">
       <CardHeader>My Tickets by category</CardHeader>
-      <Divider className="opacity-50" />
+      <Divider />
       <CardBody className="p-1">
         <Doughnut
           data={data}
