@@ -23,23 +23,23 @@ export default async function Home() {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
+        <div className="col-span-1 lg:col-span-4">
           <PriorityCard />
         </div>
-        <div className="col-span-4">
+        <div className="col-span-1 lg:col-span-4">
           <CategoryCard />
         </div>
-        <div className="col-span-4">
+        <div className="col-span-1 md:col-span-2 lg:col-span-4">
           <DayCard />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-1 md:col-span-2 lg:col-span-6">
           <StatusCard tickets={allTickets} />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-1 md:col-span-2 lg:col-span-6">
           <MostCard />
         </div>
-        <div className="col-span-12">
+        <div className="col-span-1 md:col-span-2 lg:col-span-12">
           <LatestCard />
         </div>
       </div>
