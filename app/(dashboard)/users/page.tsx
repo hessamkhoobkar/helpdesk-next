@@ -21,7 +21,9 @@ async function getUser(params: string) {
 export default function UserPage() {
   const [users, setUsers] = useState([]);
 
-  const [selectedTypes, setSelectedKeys] = useState(
+  // IMPORTANT - USAGE OF ANY TYPE
+  // This is a workaround to avoid a bug in nextui for the line 54 of this file | onSelectionChange={setSelectedKeys}
+  const [selectedTypes, setSelectedKeys] = useState<any>(
     new Set(["CLIENT", "EMPLOYEE"])
   );
 
