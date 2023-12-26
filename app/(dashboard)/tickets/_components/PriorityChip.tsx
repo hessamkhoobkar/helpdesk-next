@@ -33,7 +33,7 @@ export default function PriorityChip({
   }
 
   return (
-    <div className="text-xl font-medium text-default-300 flex gap-2 px-0 py-1">
+    <div className="text-xl font-medium text-default-300 flex gap-2">
       <BarsIcon color1={color1} color2={color2} color3={color3} />
       <span className={`text-base font-medium ${textColor}`}>{text}</span>
     </div>
