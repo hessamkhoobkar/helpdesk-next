@@ -18,12 +18,14 @@ export default function CommentsList({
   comments?: Comment[];
 }) {
   return (
-    <div className="gtid grid-cols-1 gap-4">
-      <CommentCard
-        user={firstComment.user}
-        date={firstComment.date}
-        comment={firstComment.comment}
-      />
+    <div className="grid grid-cols-12 gap-4 mt-8">
+      <div className="col-span-7">
+        <CommentCard
+          user={firstComment.user}
+          date={firstComment.date}
+          comment={firstComment.comment}
+        />
+      </div>
     </div>
   );
 }
