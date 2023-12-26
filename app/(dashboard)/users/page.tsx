@@ -62,7 +62,11 @@ export default function UserPage() {
         {users.length > 0 ? (
           <UserList users={users} />
         ) : (
-          <div>No users found</div>
+          <div className="w-full h-48 rounded-lg bg-white shadow p-4 flex justify-center items-center">
+            <p className="text-2xl font-bold text-default-400">
+              No users found
+            </p>
+          </div>
         )}
       </div>
     </div>
