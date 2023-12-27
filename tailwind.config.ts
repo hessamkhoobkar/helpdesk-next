@@ -98,7 +98,7 @@ const config: Config = {
             divider: "#131e30",
             focus: "#1D55C4",
             default: {
-              100: "#0a1324",
+              100: "#070F1D",
               200: "#131e30",
               300: "#1e2a3d",
               400: "#2c394a",
