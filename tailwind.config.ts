@@ -74,7 +74,8 @@ const config: Config = {
               DEFAULT: "#E27C00",
             },
             danger: {
-              100: "#FDE2D2",
+              50: "#FDE2D2",
+              100: "#FCC0A6",
               200: "#FCC0A6",
               300: "#F69378",
               400: "#ED6A56",
