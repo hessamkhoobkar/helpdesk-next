@@ -13,6 +13,9 @@ import PriorityCard from "./_components/dashboard/PriorityCard";
 
 type ExtendedTicket = Ticket & { User: User };
 
+// TODO: Write and update markdown file
+// TODO: Loading pages for tickets, users, single ticket view, add and edit ticket page
+
 export default async function Home() {
   let tickets: ExtendedTicket[] = [];
   let categories: Category[] = [];
