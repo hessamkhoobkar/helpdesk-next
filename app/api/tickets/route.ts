@@ -3,14 +3,20 @@ import { z } from "zod";
 import prisma from "@/prisma/client";
 
 const createTicketSchema = z.object({
-  subject: z.string().min(3).max(250),
-  content: z.string().min(3).max(5000),
+  subject: z.string().min(5).max(60),
+  description: z.string().min(5).max(250),
+  userId: z.string().cuid(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
+  categoryId: z.number(),
 });
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const validatoin = createTicketSchema.safeParse(body);
+  const validatoin = createTicketSchema.safeParse({
+    ...body,
+    categoryId: parseInt(body.categoryId),
+  });
+
   if (!validatoin.success) {
     return NextResponse.json(validatoin.error.format(), { status: 400 });
   }
@@ -18,8 +24,10 @@ export async function POST(request: NextRequest) {
   const newTicket = await prisma.ticket.create({
     data: {
       subject: body.subject,
-      content: body.content,
+      description: body.description,
+      userId: body.userId,
       priority: body.priority,
+      categoryId: parseInt(body.categoryId),
     },
   });
 
