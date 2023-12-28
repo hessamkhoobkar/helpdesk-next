@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Session, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import TicketForm from "../_components/TicketForm";
 
@@ -17,7 +17,7 @@ export default async function NewTicketsPage() {
 
   const session = await getServerSession(authOptions);
   // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
-  const cuurentUserId = session.user.id;
+  const currentUserId = session.user.id;
 
   return (
     <TicketForm
@@ -25,7 +25,7 @@ export default async function NewTicketsPage() {
       categories={categories}
       priorities={priorities}
       status={status}
-      cuurentUserId={cuurentUserId}
+      currentUserId={currentUserId}
       users={users}
     />
   );
