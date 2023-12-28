@@ -14,7 +14,7 @@ import {
 import SkeletonCardUser from "../_components/SkeletonCardUser";
 
 async function getUser(params: string, setLoading: any) {
-  const response = await axios(`${process.env.BASE_URL}/api/users` + params);
+  const response = await axios(`/api/users` + params);
   const users = response.data;
 
   setLoading(false);
