@@ -25,20 +25,20 @@ export default function TicketForm({
   categories,
   priorities,
   status,
-  cuurentUserId,
+  currentUserId,
   users,
 }: {
   formTitle: string;
   categories: { id: number; name: string }[];
   priorities: string[];
   status: string[];
-  cuurentUserId: string;
+  currentUserId: string;
   users: Usertype[];
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function createTicket(data: any, cuurentUserId: string) {
+  async function createTicket(data: any, currentUserId: string) {
     setIsLoading(true);
 
     try {
@@ -47,7 +47,7 @@ export default function TicketForm({
         description: data.description,
         priority: data.priority,
         categoryId: data.category,
-        userId: cuurentUserId,
+        userId: currentUserId,
         status: data.status,
         assigneeId: data.assignee,
       });
@@ -91,7 +91,7 @@ export default function TicketForm({
         <form
           className="w-full flex flex-col gap-4"
           onSubmit={handleSubmit((data) => {
-            createTicket(data, cuurentUserId);
+            createTicket(data, currentUserId);
           })}
         >
           <Input

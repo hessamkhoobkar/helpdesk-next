@@ -19,16 +19,16 @@ type ExtendedTicket = Ticket & { User: User };
 export default async function Home() {
   let tickets: ExtendedTicket[] = [];
   let categories: Category[] = [];
-  let cuurentUserId: string;
+  let currentUserId: string;
 
   try {
     const session = await getServerSession(authOptions);
     // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
-    cuurentUserId = session.user.id;
+    currentUserId = session.user.id;
 
     try {
       const response = await axios.get(
-        `${process.env.BASE_URL}/api/tickets?userId=${cuurentUserId}`
+        `${process.env.BASE_URL}/api/tickets?userId=${currentUserId}`
       );
       tickets = response.data;
     } catch (error) {
