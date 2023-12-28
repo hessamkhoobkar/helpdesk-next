@@ -24,7 +24,7 @@ export default async function Home() {
   try {
     const session = await getServerSession(authOptions);
     // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
-    cuurentUserId = session!.user!.id;
+    cuurentUserId = session.user.id;
 
     try {
       const response = await axios.get(

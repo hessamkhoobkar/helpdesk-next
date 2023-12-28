@@ -1,16 +1,19 @@
 import axios from "axios";
 import TicketList from "./TicketList";
 import type { Ticket } from "@prisma/client";
-import PageHero from "./PageHero";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import PageHero from "../_components/PageHero";
+import { Button } from "@nextui-org/react";
+import Link from "next/link";
 
 // todo: handle error states and show user friendly error messages
 
 export default async function TicketsPage() {
   let allTickets: Ticket[] = [];
   const session = await getServerSession(authOptions);
-  const cuurentUserId = session?.user?.id;
+  // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
+  const cuurentUserId = session.user.id;
 
   try {
     const response = await axios.get(
@@ -34,7 +37,19 @@ export default async function TicketsPage() {
 
   return (
     <>
-      <PageHero />
+      <PageHero
+        title="Tickets"
+        cardActions={
+          <Button className="ms-auto" color="primary" href="/tickets/new">
+            <Link href="/tickets/new">Create new ticket</Link>
+          </Button>
+        }
+        footerActions={
+          <Button color="primary" href="/tickets/new">
+            <Link href="/tickets/new">Create new ticket</Link>
+          </Button>
+        }
+      />
       <div className="w-full flex flex-col justify-start items-start gap-4">
         {allTickets.length > 0 ? (
           <TicketList tickets={allTickets} />
