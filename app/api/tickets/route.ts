@@ -6,8 +6,10 @@ const createTicketSchema = z.object({
   subject: z.string().min(5).max(60),
   description: z.string().min(5).max(250),
   userId: z.string().cuid(),
+  status: z.enum(["OPEN", "IN_PROGRESS", "COMPLETED", "CLOSED"]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
   categoryId: z.number(),
+  assigneeId: z.string().cuid().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -26,8 +28,10 @@ export async function POST(request: NextRequest) {
       subject: body.subject,
       description: body.description,
       userId: body.userId,
+      status: body.status,
       priority: body.priority,
       categoryId: parseInt(body.categoryId),
+      assigneeId: body.assigneeId,
     },
   });
 

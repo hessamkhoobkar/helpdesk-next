@@ -5,13 +5,20 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const params = new URLSearchParams(request.nextUrl.searchParams);
   const userTypes = params.get("types");
-  const userTypesArray = userTypes?.split(",") as UserType[];
-
+  let userTypesArray;
   let users;
+
+  if (!userTypes) {
+    users = await prisma.user.findMany();
+  } else {
+    userTypesArray = userTypes?.split(",") as UserType[];
+  }
 
   if (userTypesArray && userTypesArray.length > 1) {
     users = await prisma.user.findMany();
-  } else {
+  }
+
+  if (userTypesArray && userTypesArray.length === 1) {
     users = await prisma.user.findMany({
       where: {
         type: userTypesArray![0],

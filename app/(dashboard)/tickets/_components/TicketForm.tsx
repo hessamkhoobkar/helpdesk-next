@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import PriorityChip from "./PriorityChip";
@@ -15,41 +15,48 @@ import {
   Divider,
   Card,
   CardBody,
+  User,
 } from "@nextui-org/react";
+import StatusChip from "./StatusChip";
+import { User as Usertype } from "@prisma/client";
 
 export default function TicketForm({
   formTitle,
   categories,
   priorities,
+  status,
   cuurentUserId,
+  users,
 }: {
   formTitle: string;
   categories: { id: number; name: string }[];
   priorities: string[];
+  status: string[];
   cuurentUserId: string;
+  users: Usertype[];
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function createTicket(
-    data: any,
-    cuurentUserId: string,
-    setIsLoading: (isLoading: boolean) => void
-  ) {
+  async function createTicket(data: any, cuurentUserId: string) {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${process.env.BASE_URL}/api/tickets`, {
+      const response = await axios.post(`/api/tickets`, {
         subject: data.subject,
         description: data.description,
         priority: data.priority,
         categoryId: data.category,
         userId: cuurentUserId,
+        status: data.status,
+        assigneeId: data.assignee,
       });
 
       console.log("Ticket created:", response.data);
       setIsLoading(false);
-      router.push("/tickets");
+
+      startTransition(() => router.push("/tickets"));
+      startTransition(() => router.refresh());
     } catch (error) {
       console.error("Error creating ticket:", error);
     } finally {
@@ -68,7 +75,9 @@ export default function TicketForm({
       subject: "",
       description: "",
       priority: "LOW",
+      status: "OPEN",
       category: "",
+      assignee: "",
     },
   });
 
@@ -82,7 +91,7 @@ export default function TicketForm({
         <form
           className="w-full flex flex-col gap-4"
           onSubmit={handleSubmit((data) => {
-            createTicket(data, cuurentUserId, setIsLoading);
+            createTicket(data, cuurentUserId);
           })}
         >
           <Input
@@ -142,9 +151,11 @@ export default function TicketForm({
                         value={priority}
                         textValue={priority}
                       >
-                        <PriorityChip
-                          priority={priority as "LOW" | "MEDIUM" | "HIGH"}
-                        />
+                        <div className="p-1 px-4 max-w-max bg-background rounded-full">
+                          <PriorityChip
+                            priority={priority as "LOW" | "MEDIUM" | "HIGH"}
+                          />
+                        </div>
                       </SelectItem>
                     ))}
                   </Select>
@@ -171,6 +182,124 @@ export default function TicketForm({
                 </SelectItem>
               )}
             </Select>
+          </div>
+
+          <div className="w-full flex flex-col md:flex-row gap-4">
+            <Controller
+              name="status"
+              control={control}
+              rules={{ required: "status is required" }}
+              render={({ field: { onChange, onBlur, value }, fieldState }) => {
+                return (
+                  <Select
+                    size="lg"
+                    label="Status"
+                    className="h-20"
+                    classNames={{
+                      trigger:
+                        "justify-start group-data-[has-label=true]:h-20 pt-5",
+                      innerWrapper: "group-data-[has-label=true]:pt-4",
+                    }}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    isInvalid={fieldState.invalid}
+                    errorMessage={errors.status && errors.status.message}
+                    selectedKeys={value ? [value] : []}
+                    renderValue={() => {
+                      return (
+                        <StatusChip
+                          status={
+                            value as
+                              | "OPEN"
+                              | "IN_PROGRESS"
+                              | "COMPLETED"
+                              | "CLOSED"
+                          }
+                        />
+                      );
+                    }}
+                  >
+                    {status.map((status) => (
+                      <SelectItem
+                        key={status}
+                        variant="flat"
+                        value={status}
+                        textValue={status}
+                      >
+                        <StatusChip
+                          status={
+                            status as
+                              | "OPEN"
+                              | "IN_PROGRESS"
+                              | "COMPLETED"
+                              | "CLOSED"
+                          }
+                        />
+                      </SelectItem>
+                    ))}
+                  </Select>
+                );
+              }}
+            />
+            <Controller
+              name="assignee"
+              control={control}
+              render={({ field: { onChange, onBlur, value }, fieldState }) => {
+                return (
+                  <Select
+                    size="lg"
+                    label="Assignee"
+                    items={users}
+                    className="h-20"
+                    classNames={{
+                      trigger:
+                        "justify-start group-data-[has-label=true]:h-20 pt-5",
+                      innerWrapper:
+                        "items-start group-data-[has-label=true]:pt-3",
+                    }}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    isInvalid={fieldState.invalid}
+                    errorMessage={errors.assignee && errors.assignee.message}
+                    renderValue={(items) => {
+                      return items.map((user) => (
+                        <div key={user.data && user.data.id}>
+                          {user.data && (
+                            <User
+                              key={user.data.id}
+                              name={
+                                user.data.first_name + " " + user.data.last_name
+                              }
+                              description={user.data.email}
+                              avatarProps={{
+                                src: `/${user.data.avatar}`,
+                              }}
+                            />
+                          )}
+                        </div>
+                      ));
+                    }}
+                  >
+                    {(user) => (
+                      <SelectItem
+                        key={user.id}
+                        variant="flat"
+                        value={status}
+                        textValue={user.id}
+                      >
+                        <User
+                          name={user.first_name + " " + user.last_name}
+                          description={user.email}
+                          avatarProps={{
+                            src: `/${user.avatar}`,
+                          }}
+                        />
+                      </SelectItem>
+                    )}
+                  </Select>
+                );
+              }}
+            />
           </div>
 
           <Textarea
