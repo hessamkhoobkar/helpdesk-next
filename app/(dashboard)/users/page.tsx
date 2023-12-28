@@ -26,7 +26,7 @@ export default function UserPage() {
   const [loading, setLoading] = useState(true);
 
   // IMPORTANT - USAGE OF ANY TYPE
-  // This is a workaround to avoid a bug in nextui for the line 54 of this file | onSelectionChange={setSelectedKeys}
+  // This is a workaround to avoid a bug in nextui | onSelectionChange={setSelectedKeys}
   const [selectedTypes, setSelectedKeys] = useState<any>(
     new Set(["CLIENT", "EMPLOYEE"])
   );
