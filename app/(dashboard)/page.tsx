@@ -28,7 +28,7 @@ export default async function Home() {
 
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/tickets?userId=${cuurentUserId}`
+        `${process.env.BASE_URL}/api/tickets?userId=${cuurentUserId}`
       );
       tickets = response.data;
     } catch (error) {
@@ -38,7 +38,7 @@ export default async function Home() {
 
     try {
       const categoryResponse = await axios.get(
-        "http://localhost:3000/api/categories"
+        `${process.env.BASE_URL}/api/categories`
       );
       categories = categoryResponse.data;
     } catch (error) {

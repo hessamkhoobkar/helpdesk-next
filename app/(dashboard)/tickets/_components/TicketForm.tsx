@@ -1,5 +1,10 @@
 "use client";
 
+import axios from "axios";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import PriorityChip from "./PriorityChip";
 import {
   Button,
   Input,
@@ -11,35 +16,6 @@ import {
   Card,
   CardBody,
 } from "@nextui-org/react";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import PriorityChip from "./PriorityChip";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-
-async function createTicket(
-  data: any,
-  cuurentUserId: string,
-  setIsLoading: (isLoading: boolean) => void
-) {
-  setIsLoading(true);
-
-  try {
-    const response = await axios.post("http://localhost:3000/api/tickets", {
-      subject: data.subject,
-      description: data.description,
-      priority: data.priority,
-      categoryId: data.category,
-      userId: cuurentUserId,
-    });
-
-    console.log("Ticket created:", response.data);
-  } catch (error) {
-    console.error("Error creating ticket:", error);
-  } finally {
-    setIsLoading(false);
-  }
-}
 
 export default function TicketForm({
   formTitle,
@@ -54,6 +30,32 @@ export default function TicketForm({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  async function createTicket(
+    data: any,
+    cuurentUserId: string,
+    setIsLoading: (isLoading: boolean) => void
+  ) {
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`${process.env.BASE_URL}/api/tickets`, {
+        subject: data.subject,
+        description: data.description,
+        priority: data.priority,
+        categoryId: data.category,
+        userId: cuurentUserId,
+      });
+
+      console.log("Ticket created:", response.data);
+      setIsLoading(false);
+      router.push("/tickets");
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const {
     register,
@@ -79,9 +81,8 @@ export default function TicketForm({
       <CardBody className="p-4">
         <form
           className="w-full flex flex-col gap-4"
-          onSubmit={handleSubmit(async (data) => {
-            await createTicket(data, cuurentUserId, setIsLoading);
-            router.push("/tickets");
+          onSubmit={handleSubmit((data) => {
+            createTicket(data, cuurentUserId, setIsLoading);
           })}
         >
           <Input

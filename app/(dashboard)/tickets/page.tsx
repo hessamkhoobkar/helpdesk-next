@@ -14,7 +14,7 @@ export default async function TicketsPage() {
 
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/tickets?userId=${cuurentUserId}`
+      `${process.env.BASE_URL}/api/tickets?userId=${cuurentUserId}`
     );
     allTickets = response.data;
   } catch (error: any) {

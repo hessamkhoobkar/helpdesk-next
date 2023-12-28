@@ -9,7 +9,7 @@ interface UserWithId extends Session {
 const priorities: string[] = ["LOW", "MEDIUM", "HIGH"];
 
 export default async function NewTicketsPage() {
-  const response = await axios("http://localhost:3000/api/categories");
+  const response = await axios(`${process.env.BASE_URL}/api/categories`);
   const categories = response.data;
 
   const session = await getServerSession(authOptions);
