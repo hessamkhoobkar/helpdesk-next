@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/prisma/client";
+import { TicketPriority, TicketStatus } from "@prisma/client";
 
 const createTicketSchema = z.object({
   subject: z.string().min(5).max(60),
@@ -38,13 +39,36 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newTicket, { status: 201 });
 }
 
+// Todo: currently works for employee only must add support for clients too
+
+interface Params {
+  assigneeId?: string;
+  categoryId?: number;
+  status?: TicketStatus;
+  priority?: TicketPriority;
+  [key: string]: string | number | undefined;
+}
+
 export async function GET(request: NextRequest) {
   const params = new URLSearchParams(request.nextUrl.searchParams);
 
+  const expectedParams = ["assigneeId", "status", "priority", "categoryId"];
+  let reqParams: Params = {};
+
+  expectedParams.forEach((param) => {
+    const value = params.get(param);
+
+    if (value !== null) {
+      if (param === "categoryId") {
+        reqParams[param] = parseInt(value);
+      } else {
+        reqParams[param] = value;
+      }
+    }
+  });
+
   const allTickets = await prisma.ticket.findMany({
-    where: {
-      assigneeId: params.get("userId"),
-    },
+    where: reqParams,
     orderBy: {
       status: "asc",
     },

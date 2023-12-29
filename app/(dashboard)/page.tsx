@@ -28,7 +28,7 @@ export default async function Home() {
 
     try {
       const response = await axios.get(
-        `${process.env.BASE_URL}/api/tickets?userId=${currentUserId}`
+        `${process.env.BASE_URL}/api/tickets?assigneeId=${currentUserId}`
       );
       tickets = response.data;
     } catch (error) {
