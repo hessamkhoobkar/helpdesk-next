@@ -41,7 +41,7 @@ export default function HeroAcrions({
         className="w-56"
         classNames={{
           trigger: "h-16",
-          label: "top-4 left-4",
+          label: "top-5",
           innerWrapper: "pt-12 mt-1",
         }}
         onChange={(e) => setStatus(e.target.value)}
@@ -81,7 +81,7 @@ export default function HeroAcrions({
         className="w-56"
         classNames={{
           trigger: "h-16",
-          label: "top-4 left-4",
+          label: "top-5",
           innerWrapper: "pt-12 mt-1",
         }}
         onChange={(e) => setPriority(e.target.value)}
@@ -120,7 +120,7 @@ export default function HeroAcrions({
         className="w-56"
         classNames={{
           trigger: "h-16",
-          label: "top-4 left-4",
+          label: "top-5",
           innerWrapper: "pt-12 mt-1",
         }}
         onChange={(e) => setCategory(e.target.value)}
