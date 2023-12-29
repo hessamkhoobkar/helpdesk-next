@@ -15,7 +15,13 @@ interface InfoSectionData {
   value: any;
 }
 
-export default function TicketCard({ ticket }: { ticket: ExtendedTicket }) {
+export default function TicketCard({
+  ticket,
+  withLink,
+}: {
+  ticket: ExtendedTicket;
+  withLink?: boolean;
+}) {
   const username = ticket.User.first_name + " " + ticket.User.last_name;
   const assigneeName =
     ticket.assignee.first_name + " " + ticket.assignee.last_name;
@@ -33,9 +39,11 @@ export default function TicketCard({ ticket }: { ticket: ExtendedTicket }) {
       <CardBody className="p-4">
         <div className="flex">
           <HeadInfo
+            id={ticket.id}
             subject={ticket.subject}
             createdAt={ticket.createdAt}
             user={username}
+            withLink={withLink}
           />
           <HeadActions />
         </div>

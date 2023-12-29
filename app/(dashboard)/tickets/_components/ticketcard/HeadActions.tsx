@@ -22,9 +22,6 @@ export default function HeadActions() {
       >
         <span>Edit</span>
       </Button>
-      <Button className="max-md:hidden" color="primary">
-        Mark as complete
-      </Button>
     </div>
   );
 }
