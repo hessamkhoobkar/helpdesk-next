@@ -45,7 +45,7 @@ export default function TicketCard({
             user={username}
             withLink={withLink}
           />
-          <HeadActions />
+          <HeadActions id={ticket.id} />
         </div>
       </CardBody>
       <Divider />
