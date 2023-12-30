@@ -16,8 +16,10 @@ type ExtendedTicket = Ticket & { User: User } & { assignee: User } & {
 
 export default function TicketPageClient({
   currentUserId,
+  currentUserType,
 }: {
   currentUserId: string;
+  currentUserType: string;
 }) {
   const [tickets, setTickets] = useState<ExtendedTicket[]>([]);
   const [status, setStatus] = useState<string>("");
@@ -26,16 +28,28 @@ export default function TicketPageClient({
 
   async function fetchTickets(
     currentUserId: string,
+    currentUserType: string,
     status?: string,
     priority?: string,
     categoryId?: string
   ) {
-    const params = {
-      assigneeId: currentUserId,
-      ...(status && { status }),
-      ...(priority && { priority }),
-      ...(categoryId && { categoryId }),
-    };
+    let params;
+
+    if (currentUserType === "CLIENT") {
+      params = {
+        userId: currentUserId,
+        ...(status && { status }),
+        ...(priority && { priority }),
+        ...(categoryId && { categoryId }),
+      };
+    } else {
+      params = {
+        assigneeId: currentUserId,
+        ...(status && { status }),
+        ...(priority && { priority }),
+        ...(categoryId && { categoryId }),
+      };
+    }
 
     const response = await axios.get("/api/tickets", { params });
     const tickets = response.data;
@@ -44,10 +58,14 @@ export default function TicketPageClient({
   }
 
   useEffect(() => {
-    fetchTickets(currentUserId, status, priority, category).then((tickets) =>
-      setTickets(tickets)
-    );
-  }, [currentUserId, status, priority, category]);
+    fetchTickets(
+      currentUserId,
+      currentUserType,
+      status,
+      priority,
+      category
+    ).then((tickets) => setTickets(tickets));
+  }, [currentUserId, currentUserType, status, priority, category]);
 
   return (
     <>

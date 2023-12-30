@@ -27,6 +27,7 @@ export default function TicketForm({
   status,
   currentUserId,
   users,
+  ticket,
 }: {
   formTitle: string;
   categories: { id: number; name: string }[];
@@ -34,6 +35,7 @@ export default function TicketForm({
   status: string[];
   currentUserId: string;
   users: Usertype[];
+  ticket?: any;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);

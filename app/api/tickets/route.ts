@@ -51,8 +51,14 @@ interface Params {
 
 export async function GET(request: NextRequest) {
   const params = new URLSearchParams(request.nextUrl.searchParams);
+  let expectedParams: string[];
 
-  const expectedParams = ["assigneeId", "status", "priority", "categoryId"];
+  if (params.get("userId")) {
+    expectedParams = ["userId", "status", "priority", "categoryId"];
+  } else {
+    expectedParams = ["assigneeId", "status", "priority", "categoryId"];
+  }
+
   let reqParams: Params = {};
 
   expectedParams.forEach((param) => {

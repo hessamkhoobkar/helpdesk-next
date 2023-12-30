@@ -23,8 +23,9 @@ export default function TicketCard({
   withLink?: boolean;
 }) {
   const username = ticket.User.first_name + " " + ticket.User.last_name;
-  const assigneeName =
-    ticket.assignee.first_name + " " + ticket.assignee.last_name;
+  const assigneeName = ticket.assignee
+    ? ticket.assignee.first_name + " " + ticket.assignee.last_name
+    : "Unassigned";
 
   const infoArray: InfoSectionData[] = [
     { variant: "Status", title: "Status:", value: ticket.status },
