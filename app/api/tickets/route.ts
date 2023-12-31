@@ -85,6 +85,7 @@ export async function GET(request: NextRequest) {
           id: true,
           first_name: true,
           last_name: true,
+          role: true,
         },
       },
       User: {

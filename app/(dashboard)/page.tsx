@@ -10,6 +10,7 @@ import LatestCard from "./_components/dashboard/LatestCard";
 import StatusCard from "./_components/dashboard/StatusCard";
 import CategoryCard from "./_components/dashboard/CategoryCard";
 import PriorityCard from "./_components/dashboard/PriorityCard";
+import MostCardAssignee from "./_components/dashboard/MostCardAssignee";
 
 type ExtendedTicket = Ticket & { User: User };
 
@@ -20,12 +21,12 @@ export default async function Home() {
   let tickets: ExtendedTicket[] = [];
   let categories: Category[] = [];
   let currentUserId: string;
+  let currentUserType: string;
 
   try {
     const session = await getServerSession(authOptions);
-    // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
     currentUserId = session.user.id;
-    const currentUserType = session.user.userType;
+    currentUserType = session.user.userType;
 
     try {
       const queryString =
@@ -72,7 +73,11 @@ export default async function Home() {
           <StatusCard tickets={tickets} />
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-6">
-          <MostCard tickets={tickets} />
+          {currentUserType === "CLIENT" ? (
+            <MostCardAssignee tickets={tickets} />
+          ) : (
+            <MostCard tickets={tickets} />
+          )}
         </div>
         <div className="col-span-1 md:col-span-2 lg:col-span-12">
           <LatestCard tickets={tickets} />
