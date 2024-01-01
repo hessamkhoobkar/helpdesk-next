@@ -32,7 +32,6 @@ export default function UserPage() {
     <div>
       <PageHero
         title="Users"
-        description="List of all users"
         footerActions={
           <Select
             label="Filter by user type"
