@@ -4,14 +4,11 @@ import axios from "axios";
 import UserList from "./UserList";
 import PageHero from "../_components/PageHero";
 import { useEffect, useState } from "react";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-} from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 import SkeletonCardUser from "../_components/SkeletonCardUser";
+import { UserType } from "@prisma/client";
+
+const userTypes: UserType[] = ["CLIENT", "EMPLOYEE"];
 
 async function getUser(params: string, setLoading: any) {
   const response = await axios(`/api/users` + params);
@@ -24,17 +21,12 @@ async function getUser(params: string, setLoading: any) {
 export default function UserPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // IMPORTANT - USAGE OF ANY TYPE
-  // This is a workaround to avoid a bug in nextui | onSelectionChange={setSelectedKeys}
-  const [selectedTypes, setSelectedKeys] = useState<any>(
-    new Set(["CLIENT", "EMPLOYEE"])
-  );
+  const [selectedType, setSelectedUserType] = useState<string>("");
 
   useEffect(() => {
-    const getParams = `?types=${Array.from(selectedTypes).join(",")}`;
-    getUser(getParams, setLoading).then((users) => setUsers(users));
-  }, [selectedTypes]);
+    const params = selectedType ? `?userType=${selectedType}` : "";
+    getUser(params, setLoading).then((users) => setUsers(users));
+  }, [selectedType]);
 
   return (
     <div>
@@ -42,25 +34,24 @@ export default function UserPage() {
         title="Users"
         description="List of all users"
         footerActions={
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="flat" className="capitalize">
-                user type
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Multiple selection example"
-              variant="flat"
-              closeOnSelect={false}
-              disallowEmptySelection
-              selectionMode="multiple"
-              selectedKeys={selectedTypes}
-              onSelectionChange={setSelectedKeys}
-            >
-              <DropdownItem key="CLIENT">Clients</DropdownItem>
-              <DropdownItem key="EMPLOYEE">Employee</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Select
+            label="Filter by user type"
+            placeholder="Select an type"
+            selectionMode="single"
+            className="w-56"
+            classNames={{
+              trigger: "h-16",
+              label: "top-5",
+              innerWrapper: "pt-12 mt-1",
+            }}
+            onChange={(e) => setSelectedUserType(e.target.value)}
+          >
+            {userTypes.map((userType) => (
+              <SelectItem key={userType} value={userType}>
+                {userType}
+              </SelectItem>
+            ))}
+          </Select>
         }
       />
 
