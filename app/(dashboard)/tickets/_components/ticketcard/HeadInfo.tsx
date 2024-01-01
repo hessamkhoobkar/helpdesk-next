@@ -26,14 +26,14 @@ export default function HeadInfo({
         <h1 className="w-full font-bold text-xl">{subject}</h1>
       )}
 
-      <div className="flex flex-col md:flex-row gap-1 md:gap-2 font-medium text-sm text-default-400 dark:text-default-500 whitespace-nowrap">
+      <div className="flex flex-col md:flex-row gap-1 md:gap-2 font-medium text-sm text-default-400 dark:text-default-600 whitespace-nowrap">
         <div className="flex gap-1">
           <span>Created at</span>
           <DateParser date={createdAt} />
         </div>
         <div className="flex gap-1">
           <span>by</span>
-          <span className="text-primary-300 hover:text-primary cursor-pointer">
+          <span className="text-primary hover:text-primary-300 cursor-pointer transition-all duration-200 ease-in-out">
             {user}
           </span>
         </div>
