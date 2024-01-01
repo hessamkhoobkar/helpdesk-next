@@ -12,7 +12,7 @@ import CategoryCard from "./_components/dashboard/CategoryCard";
 import PriorityCard from "./_components/dashboard/PriorityCard";
 import MostCardAssignee from "./_components/dashboard/MostCardAssignee";
 
-type ExtendedTicket = Ticket & { User: User };
+type ExtendedTicket = Ticket & { User: User } & { assignee: User };
 
 // TODO: Write and update markdown file
 // TODO: Loading pages for tickets, users, single ticket view, add and edit ticket page
