@@ -23,7 +23,7 @@ const config: Config = {
             content2: "#f2f6f7",
             content3: "#e6ebed",
             content4: "#DBE2E6",
-            divider: "#DBE2E6",
+            divider: "#e6ebed",
             focus: "#1D55C4",
             default: {
               100: "#f2f6f7",
