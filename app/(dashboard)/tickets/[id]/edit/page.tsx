@@ -61,6 +61,7 @@ export default async function EditTicketsPage(params: {
       currentUserId={currentUserId}
       users={users}
       ticket={ticket}
+      reqType="PUT"
     />
   );
 }

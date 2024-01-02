@@ -27,6 +27,7 @@ export default async function NewTicketsPage() {
       status={status}
       currentUserId={currentUserId}
       users={users}
+      reqType="POST"
     />
   );
 }

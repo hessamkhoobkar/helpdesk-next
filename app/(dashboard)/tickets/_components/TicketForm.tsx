@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { startTransition, useState } from "react";
+import { ReactNode, startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import PriorityChip from "./PriorityChip";
@@ -19,6 +19,8 @@ import {
 } from "@nextui-org/react";
 import StatusChip from "./StatusChip";
 import { User as Usertype } from "@prisma/client";
+import { GetUserDetails } from "./helper/UserDetails";
+import { GetCategoryName } from "./helper/CategoryName";
 
 export default function TicketForm({
   formTitle,
@@ -28,6 +30,7 @@ export default function TicketForm({
   currentUserId,
   users,
   ticket,
+  reqType,
 }: {
   formTitle: string;
   categories: { id: number; name: string }[];
@@ -36,6 +39,7 @@ export default function TicketForm({
   currentUserId: string;
   users: Usertype[];
   ticket?: any;
+  reqType: "PUT" | "POST";
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,21 +48,32 @@ export default function TicketForm({
 
   async function createTicket(data: any, currentUserId: string) {
     setIsLoading(true);
+    let response;
+    const ticketData = {
+      subject: data.subject,
+      description: data.description,
+      priority: data.priority,
+      categoryId: data.category,
+      userId: currentUserId,
+      status: data.status,
+      assigneeId: data.assignee,
+    };
 
     try {
-      const response = await axios.post(`/api/tickets`, {
-        subject: data.subject,
-        description: data.description,
-        priority: data.priority,
-        categoryId: data.category,
-        userId: currentUserId,
-        status: data.status,
-        assigneeId: data.assignee,
-      });
+      if (reqType === "PUT") {
+        response = await axios.put(`/api/tickets`, {
+          id: ticket?.id,
+          ...ticketData,
+        });
+      }
+
+      if (reqType === "POST") {
+        response = await axios.post(`/api/tickets`, ticketData);
+      }
 
       setIsLoading(false);
 
-      console.log("Ticket created:", response.data);
+      console.log("Ticket created:", response?.data);
 
       startTransition(() => router.push("/tickets"));
       startTransition(() => router.refresh());
@@ -143,7 +158,6 @@ export default function TicketForm({
                   onBlur={onBlur}
                   onChange={onChange}
                   isInvalid={fieldState.invalid}
-                  errorMessage={errors.priority && errors.priority.message}
                   selectedKeys={value ? [value] : []}
                   renderValue={() => (
                     <div className="p-1 px-4 max-w-max bg-background rounded-full">
@@ -192,13 +206,12 @@ export default function TicketForm({
                   onChange={onChange}
                   onSelectionChange={onChange}
                   isInvalid={fieldState.invalid}
-                  errorMessage={errors.category && errors.category.message}
                   selectedKeys={value ? [value.toString()] : []}
                   renderValue={() => (
                     <div className="p-1 px-4 max-w-max bg-background rounded-full">
                       <GetCategoryName
-                        categories={categories}
                         id={parseInt(value)}
+                        categories={categories}
                       />
                     </div>
                   )}
@@ -212,8 +225,8 @@ export default function TicketForm({
                       textValue={category}
                     >
                       <GetCategoryName
-                        categories={categories}
                         id={parseInt(category)}
+                        categories={categories}
                       />
                     </SelectItem>
                   ))}
@@ -241,7 +254,6 @@ export default function TicketForm({
                     onBlur={onBlur}
                     onChange={onChange}
                     isInvalid={fieldState.invalid}
-                    errorMessage={errors.status && errors.status.message}
                     selectedKeys={value ? [value] : []}
                     renderValue={() => {
                       return (
@@ -298,11 +310,10 @@ export default function TicketForm({
                     onBlur={onBlur}
                     onChange={onChange}
                     isInvalid={fieldState.invalid}
-                    errorMessage={errors.assignee && errors.assignee.message}
                     selectedKeys={value ? [value] : []}
                     renderValue={() => (
                       <div key={value && value.id}>
-                        <GetUserDetails users={users} id={value} />
+                        <GetUserDetails id={value} users={users} />
                       </div>
                     )}
                   >
@@ -314,7 +325,7 @@ export default function TicketForm({
                         value={user.id}
                         textValue={user.id}
                       >
-                        <GetUserDetails users={users} id={user.id} />
+                        <GetUserDetails id={user.id} users={users} />
                       </SelectItem>
                     ))}
                   </Select>
@@ -360,7 +371,7 @@ export default function TicketForm({
               className="w-full md:w-auto"
               isLoading={isLoading}
             >
-              Create your ticket
+              {reqType === "PUT" ? "Update this ticket" : "Create your ticket"}
             </Button>
             <Button
               size="lg"
@@ -375,41 +386,5 @@ export default function TicketForm({
         </form>
       </CardBody>
     </Card>
-  );
-}
-
-export function GetCategoryName({
-  categories,
-  id,
-}: {
-  categories: { id: number; name: string }[];
-  id: number;
-}) {
-  const categoryName = categories.find((category) => category.id === id)?.name;
-  return <span>{categoryName}</span>;
-}
-
-export function GetUserDetails({
-  users,
-  id,
-}: {
-  users: Usertype[];
-  id: string;
-}) {
-  const userData = users.find((user) => user.id === id);
-
-  if (!userData) {
-    console.error("User not found");
-    return "";
-  }
-
-  return (
-    <User
-      name={userData.first_name + " " + userData.last_name}
-      description={userData.email}
-      avatarProps={{
-        src: `/${userData.avatar}`,
-      }}
-    />
   );
 }

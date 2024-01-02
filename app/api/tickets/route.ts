@@ -39,7 +39,33 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newTicket, { status: 201 });
 }
 
-// Todo: currently works for employee only must add support for clients too
+export async function PUT(request: NextRequest) {
+  const body = await request.json();
+  const validatoin = createTicketSchema.safeParse({
+    ...body,
+    categoryId: parseInt(body.categoryId),
+  });
+
+  if (!validatoin.success) {
+    return NextResponse.json(validatoin.error.format(), { status: 400 });
+  }
+
+  const updatedTicket = await prisma.ticket.update({
+    where: {
+      id: body.id,
+    },
+    data: {
+      subject: body.subject,
+      description: body.description,
+      status: body.status,
+      priority: body.priority,
+      categoryId: parseInt(body.categoryId),
+      assigneeId: body.assigneeId,
+    },
+  });
+
+  return NextResponse.json(updatedTicket, { status: 200 });
+}
 
 interface Params {
   assigneeId?: string;
