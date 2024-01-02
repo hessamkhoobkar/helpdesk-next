@@ -37,39 +37,27 @@ const columns = [
 ];
 
 export default function MostCard({ tickets }: { tickets: ExtendedTicket[] }) {
-  let users: TableUser[] = [];
+  let users: {
+    [key: string]: TableUser;
+  } = {};
 
   tickets.forEach((ticket) => {
-    const isFound = users.some((user) => {
-      if (user.id === ticket.userId) {
-        return true;
-      }
-
-      return false;
-    });
-
-    if (isFound) {
-      return;
+    if (!users[ticket.userId]) {
+      users[ticket.userId] = {
+        id: ticket.userId,
+        name: ticket.User.first_name + " " + ticket.User.last_name,
+        role: ticket.User.role,
+        ticketCount: 1,
+      };
     }
 
-    users.push({
-      id: ticket.userId,
-
-      name: ticket.User.first_name + " " + ticket.User.last_name,
-      role: ticket.User.role,
-      ticketCount: 0,
-    });
+    users[ticket.userId].ticketCount++;
   });
 
-  tickets.forEach((ticket) => {
-    users.forEach((user) => {
-      if (user.id === ticket.userId) {
-        user.ticketCount++;
-      }
-    });
-  });
-
-  const rows = users.sort((a, b) => b.ticketCount - a.ticketCount).slice(0, 5);
+  const usersArr = Object.values(users);
+  const rows = usersArr
+    .sort((a, b) => b.ticketCount - a.ticketCount)
+    .slice(0, 5);
 
   return (
     <DashboardCard title="Your tickets created mostly by">

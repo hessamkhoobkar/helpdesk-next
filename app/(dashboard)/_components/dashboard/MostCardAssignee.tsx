@@ -53,7 +53,7 @@ export default function MostCardAssignee({
         id: ticket.assignee.id,
         name: ticket.assignee.first_name + " " + ticket.assignee.last_name,
         role: ticket.assignee.role,
-        ticketCount: 0,
+        ticketCount: 1,
       };
     }
 
