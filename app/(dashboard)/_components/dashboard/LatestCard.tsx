@@ -14,6 +14,9 @@ import DashboardCard from "./DashboardCard";
 import { Ticket } from "@prisma/client";
 import DateParser from "../utils/DateParser";
 import Link from "next/link";
+import PriorityChip from "../../tickets/_components/PriorityChip";
+import { StatInProgress } from "@/app/_assets/icons/progress/InProgress";
+import StatusChip from "../../tickets/_components/StatusChip";
 
 const columns = [
   {
@@ -28,6 +31,10 @@ const columns = [
     key: "priority",
     label: "Priority",
   },
+  {
+    key: "status",
+    label: "Status",
+  },
 ];
 
 export default function LatestCard({ tickets }: { tickets: Ticket[] }) {
@@ -37,6 +44,7 @@ export default function LatestCard({ tickets }: { tickets: Ticket[] }) {
       subject: ticket.subject,
       createdAt: ticket.createdAt,
       priority: ticket.priority,
+      status: ticket.status,
     };
   });
 
@@ -65,8 +73,16 @@ export default function LatestCard({ tickets }: { tickets: Ticket[] }) {
                   <TableCell>
                     <DateParser date={item.createdAt} />
                   </TableCell>
-                ) : (
+                ) : columnKey === "createdAt" ? (
                   <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                ) : columnKey === "priority" ? (
+                  <TableCell>
+                    <PriorityChip priority={item.priority} />
+                  </TableCell>
+                ) : (
+                  <TableCell>
+                    <StatusChip status={item.status} />
+                  </TableCell>
                 )
               }
             </TableRow>
