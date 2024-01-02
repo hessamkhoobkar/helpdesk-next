@@ -27,34 +27,34 @@ export default async function Home() {
     const session: ExtendedSession | null = await getServerSession(authOptions);
     currentUserId = session?.user.id!;
     currentUserType = session?.user.userType!;
-
-    try {
-      const queryString =
-        currentUserType === "CLIENT"
-          ? `userId=${currentUserId}`
-          : `assigneeId=${currentUserId}`;
-
-      const response = await axios.get(
-        `${process.env.BASE_URL}/api/tickets?${queryString}`
-      );
-      tickets = response.data;
-    } catch (error) {
-      console.error("Error fetching tickets:", error);
-      throw new Error(`Error fetching tickets: ${error}`);
-    }
-
-    try {
-      const categoryResponse = await axios.get(
-        `${process.env.BASE_URL}/api/categories`
-      );
-      categories = categoryResponse.data;
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      throw new Error(`Error fetching categories: ${error}`);
-    }
   } catch (error) {
     console.error("Error getting session:", error);
     throw new Error(`Error getting session: ${error}`);
+  }
+
+  try {
+    const queryString =
+      currentUserType === "CLIENT"
+        ? `userId=${currentUserId}`
+        : `assigneeId=${currentUserId}`;
+
+    const response = await axios.get(
+      `${process.env.BASE_URL}/api/tickets?${queryString}`
+    );
+    tickets = response.data;
+  } catch (error) {
+    console.error("Error fetching tickets:", error);
+    throw new Error(`Error fetching tickets: ${error}`);
+  }
+
+  try {
+    const categoryResponse = await axios.get(
+      `${process.env.BASE_URL}/api/categories`
+    );
+    categories = categoryResponse.data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw new Error(`Error fetching categories: ${error}`);
   }
 
   return (
