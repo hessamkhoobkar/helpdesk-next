@@ -26,6 +26,7 @@ export default async function EditTicketsPage(params: {
       },
       assignee: {
         select: {
+          id: true,
           first_name: true,
           last_name: true,
           avatar: true,

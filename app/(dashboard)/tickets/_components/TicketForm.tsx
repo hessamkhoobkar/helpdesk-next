@@ -40,6 +40,8 @@ export default function TicketForm({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
+  const categoriesList = categories.map((category) => category.id.toString());
+
   async function createTicket(data: any, currentUserId: string) {
     setIsLoading(true);
 
@@ -54,8 +56,9 @@ export default function TicketForm({
         assigneeId: data.assignee,
       });
 
-      console.log("Ticket created:", response.data);
       setIsLoading(false);
+
+      console.log("Ticket created:", response.data);
 
       startTransition(() => router.push("/tickets"));
       startTransition(() => router.refresh());
@@ -74,12 +77,12 @@ export default function TicketForm({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      subject: "",
-      description: "",
-      priority: "LOW",
-      status: "OPEN",
-      category: "",
-      assignee: "",
+      subject: ticket?.subject || "",
+      description: ticket?.description || "",
+      priority: ticket?.priority || "LOW",
+      status: ticket?.status || "OPEN",
+      category: ticket?.category?.id || "",
+      assignee: ticket?.assignee?.id || "",
     },
   });
 
@@ -96,13 +99,10 @@ export default function TicketForm({
             createTicket(data, currentUserId);
           })}
         >
-          <Input
-            size="lg"
-            type="text"
-            label="Subject"
-            isInvalid={!!errors.subject}
-            errorMessage={errors.subject && `${errors.subject?.message}`}
-            {...register("subject", {
+          <Controller
+            name="subject"
+            control={control}
+            rules={{
               required: "Subject is required",
               minLength: {
                 value: 5,
@@ -112,7 +112,17 @@ export default function TicketForm({
                 value: 60,
                 message: "Subject must be at most 60 characters",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <Input
+                size="lg"
+                type="text"
+                label="Subject"
+                isInvalid={!!errors.subject}
+                errorMessage={errors.subject && `${errors.subject?.message}`}
+                {...field}
+              />
+            )}
           />
 
           <div className="w-full flex flex-col md:flex-row gap-4">
@@ -120,70 +130,96 @@ export default function TicketForm({
               name="priority"
               control={control}
               rules={{ required: "Priority is required" }}
-              render={({ field: { onChange, onBlur, value }, fieldState }) => {
-                return (
-                  <Select
-                    size="lg"
-                    label="Priority"
-                    className="h-20"
-                    classNames={{
-                      trigger:
-                        "justify-start group-data-[has-label=true]:h-20 pt-5",
-                      innerWrapper: "group-data-[has-label=true]:pt-4",
-                    }}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    isInvalid={fieldState.invalid}
-                    errorMessage={errors.priority && errors.priority.message}
-                    selectedKeys={value ? [value] : []}
-                    renderValue={() => {
-                      return (
-                        <div className="p-1 px-4 max-w-max bg-background rounded-full">
-                          <PriorityChip
-                            priority={value as "LOW" | "MEDIUM" | "HIGH"}
-                          />
-                        </div>
-                      );
-                    }}
-                  >
-                    {priorities.map((priority) => (
-                      <SelectItem
-                        key={priority}
-                        variant="flat"
-                        value={priority}
-                        textValue={priority}
-                      >
-                        <div className="p-1 px-4 max-w-max bg-background rounded-full">
-                          <PriorityChip
-                            priority={priority as "LOW" | "MEDIUM" | "HIGH"}
-                          />
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </Select>
-                );
-              }}
-            />
-            <Select
-              size="lg"
-              variant="flat"
-              label="Category"
-              placeholder="Select a Category"
-              className="h-20"
-              classNames={{
-                trigger: "justify-start group-data-[has-label=true]:h-20 pt-5",
-                innerWrapper: "group-data-[has-label=true]:pt-4",
-              }}
-              items={categories}
-              isInvalid={!!errors.category}
-              {...register("category", { required: true })}
-            >
-              {(category) => (
-                <SelectItem key={category.id} color="primary" variant="flat">
-                  {category.name}
-                </SelectItem>
+              render={({ field: { onChange, onBlur, value }, fieldState }) => (
+                <Select
+                  size="lg"
+                  label="Priority"
+                  className="h-20"
+                  classNames={{
+                    trigger:
+                      "justify-start group-data-[has-label=true]:h-20 pt-5",
+                    innerWrapper: "group-data-[has-label=true]:pt-4",
+                  }}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  isInvalid={fieldState.invalid}
+                  errorMessage={errors.priority && errors.priority.message}
+                  selectedKeys={value ? [value] : []}
+                  renderValue={() => (
+                    <div className="p-1 px-4 max-w-max bg-background rounded-full">
+                      <PriorityChip
+                        priority={value as "LOW" | "MEDIUM" | "HIGH"}
+                      />
+                    </div>
+                  )}
+                >
+                  {priorities.map((priority) => (
+                    <SelectItem
+                      key={priority}
+                      variant="flat"
+                      value={priority}
+                      textValue={priority}
+                    >
+                      <div className="p-1 px-4 max-w-max bg-background rounded-full">
+                        <PriorityChip
+                          priority={priority as "LOW" | "MEDIUM" | "HIGH"}
+                        />
+                      </div>
+                    </SelectItem>
+                  ))}
+                </Select>
               )}
-            </Select>
+            />
+
+            <Controller
+              name="category"
+              control={control}
+              rules={{ required: "Category is required" }}
+              render={({ field: { onChange, onBlur, value }, fieldState }) => (
+                <Select
+                  selectionMode="single"
+                  size="lg"
+                  variant="flat"
+                  label="Category"
+                  placeholder="Select a Category"
+                  className="h-20"
+                  classNames={{
+                    trigger:
+                      "justify-start group-data-[has-label=true]:h-20 pt-5",
+                    innerWrapper: "group-data-[has-label=true]:pt-4",
+                  }}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  onSelectionChange={onChange}
+                  isInvalid={fieldState.invalid}
+                  errorMessage={errors.category && errors.category.message}
+                  selectedKeys={value ? [value.toString()] : []}
+                  renderValue={() => (
+                    <div className="p-1 px-4 max-w-max bg-background rounded-full">
+                      <GetCategoryName
+                        categories={categories}
+                        id={parseInt(value)}
+                      />
+                    </div>
+                  )}
+                >
+                  {categoriesList.map((category) => (
+                    <SelectItem
+                      key={category}
+                      color="primary"
+                      variant="flat"
+                      value={category}
+                      textValue={category}
+                    >
+                      <GetCategoryName
+                        categories={categories}
+                        id={parseInt(category)}
+                      />
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
           </div>
 
           <div className="w-full flex flex-col md:flex-row gap-4">
@@ -249,9 +285,9 @@ export default function TicketForm({
               render={({ field: { onChange, onBlur, value }, fieldState }) => {
                 return (
                   <Select
+                    selectionMode="single"
                     size="lg"
                     label="Assignee"
-                    items={users}
                     className="h-20"
                     classNames={{
                       trigger:
@@ -263,57 +299,34 @@ export default function TicketForm({
                     onChange={onChange}
                     isInvalid={fieldState.invalid}
                     errorMessage={errors.assignee && errors.assignee.message}
-                    renderValue={(items) => {
-                      return items.map((user) => (
-                        <div key={user.data && user.data.id}>
-                          {user.data && (
-                            <User
-                              key={user.data.id}
-                              name={
-                                user.data.first_name + " " + user.data.last_name
-                              }
-                              description={user.data.email}
-                              avatarProps={{
-                                src: `/${user.data.avatar}`,
-                              }}
-                            />
-                          )}
-                        </div>
-                      ));
-                    }}
+                    selectedKeys={value ? [value] : []}
+                    renderValue={() => (
+                      <div key={value && value.id}>
+                        <GetUserDetails users={users} id={value} />
+                      </div>
+                    )}
                   >
-                    {(user) => (
+                    {users.map((user) => (
                       <SelectItem
                         key={user.id}
+                        color="primary"
                         variant="flat"
-                        value={status}
+                        value={user.id}
                         textValue={user.id}
                       >
-                        <User
-                          name={user.first_name + " " + user.last_name}
-                          description={user.email}
-                          avatarProps={{
-                            src: `/${user.avatar}`,
-                          }}
-                        />
+                        <GetUserDetails users={users} id={user.id} />
                       </SelectItem>
-                    )}
+                    ))}
                   </Select>
                 );
               }}
             />
           </div>
 
-          <Textarea
-            size="lg"
-            variant="flat"
-            minRows={12}
-            label="Description"
-            isInvalid={!!errors.description}
-            errorMessage={
-              errors.description && `${errors.description?.message}`
-            }
-            {...register("description", {
+          <Controller
+            name="description"
+            control={control}
+            rules={{
               required: "Description is required",
               minLength: {
                 value: 5,
@@ -323,7 +336,20 @@ export default function TicketForm({
                 value: 250,
                 message: "Description must be at most 250 characters",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                size="lg"
+                variant="flat"
+                minRows={12}
+                label="Description"
+                isInvalid={!!errors.description}
+                errorMessage={
+                  errors.description && `${errors.description?.message}`
+                }
+              />
+            )}
           />
 
           <div className="flex flex-col md:flex-row gap-2">
@@ -349,5 +375,41 @@ export default function TicketForm({
         </form>
       </CardBody>
     </Card>
+  );
+}
+
+export function GetCategoryName({
+  categories,
+  id,
+}: {
+  categories: { id: number; name: string }[];
+  id: number;
+}) {
+  const categoryName = categories.find((category) => category.id === id)?.name;
+  return <span>{categoryName}</span>;
+}
+
+export function GetUserDetails({
+  users,
+  id,
+}: {
+  users: Usertype[];
+  id: string;
+}) {
+  const userData = users.find((user) => user.id === id);
+
+  if (!userData) {
+    console.error("User not found");
+    return "";
+  }
+
+  return (
+    <User
+      name={userData.first_name + " " + userData.last_name}
+      description={userData.email}
+      avatarProps={{
+        src: `/${userData.avatar}`,
+      }}
+    />
   );
 }
