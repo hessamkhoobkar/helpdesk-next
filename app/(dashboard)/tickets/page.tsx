@@ -1,13 +1,17 @@
-import { getServerSession } from "next-auth";
+import type { User } from "@prisma/client";
+import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 import TicketPageClient from "./TicketPageClient";
 
+interface ExtendedSession extends Session {
+  user: User & { userType: string };
+}
+
 export default async function TicketsPage() {
-  const session = await getServerSession(authOptions);
-  // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
-  const currentUserId = session.user.id;
-  // @ts-ignore // Ignoreing the error as the session type does not get updated with ID
-  const currentUserType = session.user.userType;
+  const session: ExtendedSession | null = await getServerSession(authOptions);
+  const currentUserId = session?.user.id!;
+  const currentUserType = session?.user.userType!;
 
   return (
     <>

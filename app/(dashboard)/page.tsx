@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 import type { Category, Ticket, User } from "@prisma/client";
@@ -13,9 +13,9 @@ import PriorityCard from "./_components/dashboard/PriorityCard";
 import MostCardAssignee from "./_components/dashboard/MostCardAssignee";
 
 type ExtendedTicket = Ticket & { User: User } & { assignee: User };
-
-// TODO: Write and update markdown file
-// TODO: Loading pages for tickets, users, single ticket view, add and edit ticket page
+interface ExtendedSession extends Session {
+  user: User & { userType: string };
+}
 
 export default async function Home() {
   let tickets: ExtendedTicket[] = [];
@@ -24,9 +24,9 @@ export default async function Home() {
   let currentUserType: string;
 
   try {
-    const session = await getServerSession(authOptions);
-    currentUserId = session.user.id;
-    currentUserType = session.user.userType;
+    const session: ExtendedSession | null = await getServerSession(authOptions);
+    currentUserId = session?.user.id!;
+    currentUserType = session?.user.userType!;
 
     try {
       const queryString =
