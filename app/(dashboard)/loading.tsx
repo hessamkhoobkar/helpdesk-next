@@ -1,27 +1,12 @@
-import SkeletonCard from "./_components/SkeletonCard";
+import { Spinner } from "@nextui-org/react";
 
 export default function Loading() {
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
-        <div className="col-span-1 lg:col-span-4">
-          <SkeletonCard />
-        </div>
-        <div className="col-span-1 lg:col-span-4">
-          <SkeletonCard />
-        </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-4">
-          <SkeletonCard />
-        </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-6">
-          <SkeletonCard />
-        </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-6">
-          <SkeletonCard />
-        </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-12">
-          <SkeletonCard />
-        </div>
+    <div className="w-full flex flex-col justify-center items-center gap-8 p-16 translate-y-6 transition-all duration-200 ease-in-out">
+      <Spinner size="lg" />
+      <div>
+        <span className="brand-type loading">Help</span>
+        <span className="brand-type loading">Desk</span>
       </div>
     </div>
   );

@@ -8,7 +8,6 @@ import {
   NavbarItem,
   Button,
 } from "@nextui-org/react";
-import styles from "./navbar.module.css";
 import UserMenu from "./navbar/UserMenu";
 import { BellIcon } from "@/app/_assets/icons/Bell";
 import Navigation from "./navbar/Navigation";
@@ -20,7 +19,7 @@ export default async function AppNavbar() {
     <Navbar maxWidth="xl" className="bg-primary-700 dark:bg-primary-200">
       <NavbarContent justify="center">
         <NavbarBrand className="w-24">
-          <Link href="/" className={styles.brandIcon}>
+          <Link href="/" className="brand-type">
             HELPDESK
           </Link>
         </NavbarBrand>
