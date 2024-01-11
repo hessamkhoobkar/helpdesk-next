@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
 import { getServerSession, Session } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils/authOptions";
 
 import TicketPageClient from "./TicketPageClient";
 

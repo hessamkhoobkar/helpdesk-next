@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getServerSession, Session } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils/authOptions";
 
 import type { Category, Ticket, User } from "@prisma/client";
 

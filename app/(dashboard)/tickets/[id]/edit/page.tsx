@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import axios from "axios";
 import type { User } from "@prisma/client";
 import { getServerSession, Session } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils/authOptions";
 import TicketForm from "../../_components/TicketForm";
 
 const priorities: string[] = ["LOW", "MEDIUM", "HIGH"];
