@@ -69,3 +69,5 @@ export default async function EditTicketsPage(params: {
     />
   );
 }
+
+export const dynamic = "force-dynamic";

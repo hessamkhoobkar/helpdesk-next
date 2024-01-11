@@ -35,3 +35,5 @@ export default async function NewTicketsPage() {
     />
   );
 }
+
+export const dynamic = "force-dynamic";
