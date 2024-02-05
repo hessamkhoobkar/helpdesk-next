@@ -80,8 +80,13 @@ export default function TicketPageClient({
       <PageHero
         title="Tickets"
         cardActions={
-          <Button className="ms-auto" color="primary" href="/tickets/new">
-            <Link href="/tickets/new">Create new ticket</Link>
+          <Button
+            className="ms-auto"
+            color="primary"
+            as={Link}
+            href="/tickets/new"
+          >
+            <span>Create new ticket</span>
           </Button>
         }
         footerActions={
