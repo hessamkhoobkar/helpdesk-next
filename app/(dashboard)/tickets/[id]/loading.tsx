@@ -1,5 +1,5 @@
-import React from "react";
+import SkeletonCardTicket from "../../_components/SkeletonCardTicket";
 
 export default function loading() {
-  return <div>loading</div>;
+  return <SkeletonCardTicket />;
 }
