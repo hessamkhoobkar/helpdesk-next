@@ -24,7 +24,7 @@ export default function TicketPageClient({
   currentUserId: string;
   currentUserType: string;
 }) {
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [tickets, setTickets] = useState<ExtendedTicket[]>([]);
   const [status, setStatus] = useState<string>("");
   const [priority, setPriority] = useState<string>("");
