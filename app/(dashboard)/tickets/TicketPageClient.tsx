@@ -5,10 +5,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Category, Ticket, User } from "@prisma/client";
 
+import { Button } from "@nextui-org/react";
+
 import TicketList from "./TicketList";
 import PageHero from "../_components/PageHero";
 import HeroAcrions from "./_components/HeroAcrions";
-import { Button } from "@nextui-org/react";
+import TicketLoadingList from "./_components/TicketLoadingList";
+import EmptyList from "./_components/EmptyList";
 
 type ExtendedTicket = Ticket & { User: User } & { assignee: User } & {
   category: Category;
@@ -21,6 +24,7 @@ export default function TicketPageClient({
   currentUserId: string;
   currentUserType: string;
 }) {
+  const [fetching, setFetching] = useState(false);
   const [tickets, setTickets] = useState<ExtendedTicket[]>([]);
   const [status, setStatus] = useState<string>("");
   const [priority, setPriority] = useState<string>("");
@@ -58,13 +62,17 @@ export default function TicketPageClient({
   }
 
   useEffect(() => {
+    setFetching(true);
     fetchTickets(
       currentUserId,
       currentUserType,
       status,
       priority,
       category
-    ).then((tickets) => setTickets(tickets));
+    ).then((tickets) => {
+      setTickets(tickets);
+      setFetching(false);
+    });
   }, [currentUserId, currentUserType, status, priority, category]);
 
   return (
@@ -84,7 +92,9 @@ export default function TicketPageClient({
           />
         }
       />
-      {tickets && <TicketList tickets={tickets} />}
+      {!fetching && tickets && <TicketList tickets={tickets} />}
+      {!fetching && tickets.length === 0 && <EmptyList />}
+      {fetching && <TicketLoadingList />}
     </>
   );
 }
