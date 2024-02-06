@@ -371,7 +371,11 @@ export default function TicketForm({
               className="w-full md:w-auto"
               isLoading={isLoading}
             >
-              {reqType === "PUT" ? "Update this ticket" : "Create your ticket"}
+              {isLoading
+                ? "Submitting ..."
+                : reqType === "PUT"
+                ? "Update this ticket"
+                : "Create your ticket"}
             </Button>
             <Button
               size="lg"
